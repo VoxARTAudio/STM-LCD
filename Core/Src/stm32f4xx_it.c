@@ -53,12 +53,6 @@ int count = 0;
 extern MPU6050_t MPU6050;
 extern int cRad;
 
-//RawData_Def myAccelRaw, myGyroRaw;
-//ScaledData_Def myAccelScaled, myGyroScaled;
-
-char* pog = "POG";
-char* champ = "CHAMP";
-float accelBuff[64];
 int counter = 0;
 int i = 0;
 int timeDiff = 0;
@@ -80,6 +74,7 @@ extern TIM_HandleTypeDef htim7;
 extern TIM_HandleTypeDef htim10;
 /* USER CODE BEGIN EV */
 extern MPU6050_t MPU6050;
+extern circle c;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -242,16 +237,22 @@ void EXTI0_IRQHandler(void)
 void TIM1_UP_TIM10_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 0 */
-	/*double dt = (HAL_GetTick()-timeDiff)*1000;
+	if(MPU6050.KalmanAngleY > 40 && MPU6050.KalmanAngleY < 80) {
+		updateCircle(0, 0, 2);
+	}
+		
+	if(MPU6050.KalmanAngleY > 80 && MPU6050.KalmanAngleY < 190) {
+		updateCircle(0, 0, 6);
+	}
 	
-	double Ao = accelBuff[64-count];
-	double Af = accelBuff[count];
+	if(MPU6050.KalmanAngleY > -185 && MPU6050.KalmanAngleY < -40) {
+		updateCircle(0, 0, -6);
+	}
 	
-	double Vo = 0.5*(Ao + Ao-1)*dt + Vo-1;
-	
-	double Xf = 0.25*(Af+Ao)*pow(dt, 2)*+0; */
-	
-	timeDiff = HAL_GetTick();
+	if(MPU6050.KalmanAngleY > -50 && MPU6050.KalmanAngleY < -5) {
+		updateCircle(0, 0, -2);
+	}
+
   /* USER CODE END TIM1_UP_TIM10_IRQn 0 */
   HAL_TIM_IRQHandler(&htim10);
   /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 1 */
@@ -284,7 +285,6 @@ void EXTI15_10_IRQHandler(void)
 	//toggle = !toggle;
 	BSP_LCD_Clear(LCD_COLOR_WHITE);
 	BSP_LCD_FillCircle(150, 120, 50);
-	cRad = 50;
   /* USER CODE END EXTI15_10_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(User_Button_Pin);
   /* USER CODE BEGIN EXTI15_10_IRQn 1 */
@@ -308,9 +308,14 @@ void TIM7_IRQHandler(void)
 	
 	//i = (i+count) % count;
 	
-	accelBuff[count] = MPU6050.Ax;
-	count++;
-	count = count > 64 ? 0 : count;
+//	accelBuff[count] = MPU6050.Ax;
+//	count++;
+//	count = count > 64 ? 0 : count;
+	if(MPU6050.Ay > 1.0) {
+		serialPrintln("Moved Positive Y!");
+	} else if(MPU6050.Ay < -1.5) {
+		serialPrintln("Moved negative Y!");
+	}
   /* USER CODE END TIM7_IRQn 0 */
   HAL_TIM_IRQHandler(&htim7);
   /* USER CODE BEGIN TIM7_IRQn 1 */

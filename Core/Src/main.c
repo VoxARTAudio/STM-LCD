@@ -61,7 +61,7 @@ SRAM_HandleTypeDef hsram1;
 /* USER CODE BEGIN PV */
 int swap = 0;
 MPU6050_t MPU6050;
-int cRad = 50;
+circle c = {50, 150, 120};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -79,17 +79,6 @@ static void MX_FSMC_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-	void updateCircle(int scaler) {
-		cRad += scaler;
-		
-		if(cRad > 100 || cRad < 10) {
-			cRad = cRad > 10 ? 100 : 10;
-		} else {
-			BSP_LCD_Clear(LCD_COLOR_WHITE);
-			BSP_LCD_FillCircle(150, 120, cRad);
-		}
-		
-}
 /* USER CODE END 0 */
 
 /**
@@ -152,7 +141,7 @@ int main(void)
 	
 	HAL_TIM_Base_Start_IT(&htim7);
 
-	updateCircle(0);	
+	BSP_LCD_FillCircle(c.xPos, c.yPos, c.radius);
 	
 	HAL_TIM_Base_Start_IT(&htim10);
 	
@@ -162,31 +151,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-//		if(HAL_ADC_PollForConversion(&hadc3,1000) == HAL_OK) {
-//			readValue = HAL_ADC_GetValue(&hadc3);
-//			HAL_ADC_Start(&hadc3);
-//			//measureNum++;
-//		}
-		//serialPrintln("WHILE LOOP:\n");
-		
-   // serialPrintln("HI\n");
-		while(MPU6050.KalmanAngleY > 40 && MPU6050.KalmanAngleY < 80) {
-			updateCircle(2);
-		}
-		
-		while(MPU6050.KalmanAngleY > 80 && MPU6050.KalmanAngleY < 190) {
-			updateCircle(6);
-		}
-		
-		while(MPU6050.KalmanAngleY > -185 && MPU6050.KalmanAngleY < -40) {
-			updateCircle(-6);
-		}
-		
-		while(MPU6050.KalmanAngleY > -50 && MPU6050.KalmanAngleY < -5) {
-			updateCircle(-2);
-		}
-		
 		
     /* USER CODE END WHILE */
 

@@ -7,11 +7,37 @@
 #include <stdlib.h>
 #include "mpu6050.h"
 
+/*********************** */
+/*    Extern Variables   */ 
+/*********************** */
 extern UART_HandleTypeDef huart3;
-
 extern float accelBuff[64];
+extern circle c;
 extern MPU6050_t MPU6050;
 
+/*********************** */
+/*   Private Variables   */
+/*********************** */
+
+
+/* ********************* */
+/*    Circle Control     */
+/* ********************* */
+void updateCircle(int x, int y, int r) {
+	c.xPos += x;
+	c.yPos += y;
+	c.radius += r;
+	if(c.radius > 100 ||c.radius < 10) {
+		c.radius = c.radius > 10 ? 100 : 10;
+	} else {
+		BSP_LCD_Clear(LCD_COLOR_WHITE);
+		BSP_LCD_FillCircle(c.xPos, c.yPos, c.radius);
+	}
+}
+
+/* ********************* */
+/*    Serial Logging     */
+/* ********************* */
 void serialPrint(char* msg) {
 	uint8_t MSG[35] = {'\0'};
 	//uint8_t X = 0;
@@ -51,9 +77,5 @@ void serialPrintIMU() {
 	//uint8_t X = 0;
 	sprintf(MSG, "x: %0.1f  y: %0.1f  z: %0.1f\n", MPU6050.Ax, MPU6050.Ay, MPU6050.Az);
 	HAL_UART_Transmit(&huart3, MSG, sizeof(MSG), 100);
-}
-
-void imuPos() {
-	int dt = HAL_GetTick();
 }
 	
