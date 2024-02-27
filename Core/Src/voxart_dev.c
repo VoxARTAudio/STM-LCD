@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "mpu6050.h"
+#include <stdbool.h>
 
 /*********************** */
 /*    Extern Variables   */ 
@@ -18,7 +19,13 @@ extern MPU6050_t MPU6050;
 /*********************** */
 /*   Private Variables   */
 /*********************** */
-
+#define MAX_Y 170
+#define MIN_Y 100
+#define MIN_X 40
+#define MAX_X 100
+#define MAX_RADIUS 100
+#define MIN_RADIUS 10
+bool update = true;
 
 /* ********************* */
 /*    Circle Control     */
@@ -27,12 +34,24 @@ void updateCircle(int x, int y, int r) {
 	c.xPos += x;
 	c.yPos += y;
 	c.radius += r;
-	if(c.radius > 100 ||c.radius < 10) {
-		c.radius = c.radius > 10 ? 100 : 10;
-	} else {
+	if((c.radius > MAX_RADIUS) || (c.radius < MIN_RADIUS)) {
+		c.radius = c.radius > MAX_RADIUS ? MAX_RADIUS : MIN_RADIUS;
+	}
+	
+	if((c.yPos > MAX_Y) || (c.yPos < MIN_Y)) {
+		c.yPos = c.yPos > MAX_Y ? MAX_Y : MIN_Y;
+	}
+	
+	if(c.xPos > MAX_X || c.xPos < MIN_X) {
+		c.xPos = c.xPos > MAX_X ? MAX_X : MIN_X;
+	} 
+	
+	if(update) {
 		BSP_LCD_Clear(LCD_COLOR_WHITE);
 		BSP_LCD_FillCircle(c.xPos, c.yPos, c.radius);
 	}
+		//serialPrintln("Updated Circle!");
+//	}
 }
 
 /* ********************* */
@@ -48,20 +67,12 @@ void serialPrint(char* msg) {
 void serialPrintln(char* msg) {
 	uint8_t MSG[35] = {'\0'};
 	//uint8_t X = 0;
-	msg = strcat(msg, "\n");
-	sprintf(MSG, msg);
+	char* fstring = malloc(strlen(msg) + 4);
+	strcpy(fstring, msg);
+	strcat(fstring, "\r\n");
+	sprintf(MSG, "%s", fstring);
 	HAL_UART_Transmit(&huart3, MSG, sizeof(MSG), 100);
-
-	//HAL_UART_Transmit(&huart3, (uint8_t *)msg, strlen (msg), HAL_MAX_DELAY);
-	
-}
-
-void serialPrintVarln(char* msg, void* var) {
-	uint8_t MSG[35] = {'\0'};
-	//uint8_t X = 0;
-	msg = strcat(msg, "\r\n");
-	sprintf(MSG, msg);
-	HAL_UART_Transmit(&huart3, MSG, sizeof(MSG), 100);
+	free(fstring);
 }
 
 void serialPrintIMU() {

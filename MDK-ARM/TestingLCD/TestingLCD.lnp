@@ -2,6 +2,7 @@
 "testinglcd\startup_stm32f407xx.o"
 "testinglcd\mpu6050.o"
 "testinglcd\voxart_dev.o"
+"testinglcd\imu_parser.o"
 "testinglcd\main.o"
 "testinglcd\stm32f4xx_it.o"
 "testinglcd\stm32f4xx_hal_msp.o"

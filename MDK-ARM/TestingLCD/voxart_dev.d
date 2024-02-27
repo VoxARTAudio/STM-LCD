@@ -53,3 +53,4 @@ testinglcd\voxart_dev.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 testinglcd\voxart_dev.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 testinglcd\voxart_dev.o: ../Core/Inc/mpu6050.h
 testinglcd\voxart_dev.o: ../Core/Inc/i2c.h
+testinglcd\voxart_dev.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

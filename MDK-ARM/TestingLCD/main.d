@@ -52,3 +52,5 @@ testinglcd\main.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 testinglcd\main.o: ../Core/Inc/mpu6050.h
 testinglcd\main.o: ../Core/Inc/i2c.h
 testinglcd\main.o: ../Core/Inc/voxart_dev.h
+testinglcd\main.o: ../Core/Inc/imu_parser.h
+testinglcd\main.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

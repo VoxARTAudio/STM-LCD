@@ -29,6 +29,7 @@
 #include "mpu6050.h"
 #include <math.h>
 #include "voxart_dev.h"
+#include "imu_parser.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,14 +49,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-int toggle = 0;
-int count = 0;
-extern MPU6050_t MPU6050;
-extern int cRad;
 
-int counter = 0;
-int i = 0;
-int timeDiff = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -72,9 +66,16 @@ int timeDiff = 0;
 extern I2C_HandleTypeDef hi2c1;
 extern TIM_HandleTypeDef htim7;
 extern TIM_HandleTypeDef htim10;
+extern TIM_HandleTypeDef htim11;
 /* USER CODE BEGIN EV */
 extern MPU6050_t MPU6050;
 extern circle c;
+extern imuMovement imu;
+extern uint32_t timestamp;
+extern float v_x;
+extern float v_y;
+extern float v_z;
+extern enum effectState state;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -221,13 +222,16 @@ void SysTick_Handler(void)
 void EXTI0_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI0_IRQn 0 */
-	HAL_GPIO_TogglePin(LED2_GPIO_PORT, LED2_PIN);
+	if(state != PITCH) {
+		state = PITCH;
+	} else {
+		state = NONE;
+	}
 	serialPrintln("KEY PRESSED");
-
   /* USER CODE END EXTI0_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
   /* USER CODE BEGIN EXTI0_IRQn 1 */
-
+	
   /* USER CODE END EXTI0_IRQn 1 */
 }
 
@@ -237,20 +241,40 @@ void EXTI0_IRQHandler(void)
 void TIM1_UP_TIM10_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 0 */
-	if(MPU6050.KalmanAngleY > 40 && MPU6050.KalmanAngleY < 80) {
-		updateCircle(0, 0, 2);
-	}
+	if(state == PITCH) {
+		if(MPU6050.KalmanAngleY > 40 && MPU6050.KalmanAngleY < 80) {
+			updateCircle(0, 0, 2);
+		}
+			
+		if(MPU6050.KalmanAngleY > 80 && MPU6050.KalmanAngleY < 190) {
+			updateCircle(0, 0, 6);
+		}
 		
-	if(MPU6050.KalmanAngleY > 80 && MPU6050.KalmanAngleY < 190) {
-		updateCircle(0, 0, 6);
+		if(MPU6050.KalmanAngleY > -185 && MPU6050.KalmanAngleY < -40) {
+			updateCircle(0, 0, -6);
+		}
+		
+		if(MPU6050.KalmanAngleY > -50 && MPU6050.KalmanAngleY < -20) {
+			updateCircle(0, 0, -2);
+		}
 	}
 	
-	if(MPU6050.KalmanAngleY > -185 && MPU6050.KalmanAngleY < -40) {
-		updateCircle(0, 0, -6);
+	if(state == REVERB) {
+		if(imu.x == 1) {
+			updateCircle(-3, 0, 0);
+		} else if(imu.x == -1) {
+			updateCircle(3, 0, 0);
+		}
 	}
 	
-	if(MPU6050.KalmanAngleY > -50 && MPU6050.KalmanAngleY < -5) {
-		updateCircle(0, 0, -2);
+	if(state == CHORUS) {
+		if(imu.y == 1) {
+			//serialPrintln("Move Circle +Y");
+			updateCircle(0, 3, 0);
+		} else if(imu.y == -1) {
+			//serialPrintln("Move Circle -Y");
+			updateCircle(0, -3, 0);
+		}
 	}
 
   /* USER CODE END TIM1_UP_TIM10_IRQn 0 */
@@ -258,6 +282,23 @@ void TIM1_UP_TIM10_IRQHandler(void)
   /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 1 */
 
   /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM1 trigger and commutation interrupts and TIM11 global interrupt.
+  */
+void TIM1_TRG_COM_TIM11_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM1_TRG_COM_TIM11_IRQn 0 */
+	//serialPrintln("Hi");
+	parseReverbData();
+	parseChorusData();
+	
+  /* USER CODE END TIM1_TRG_COM_TIM11_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim11);
+  /* USER CODE BEGIN TIM1_TRG_COM_TIM11_IRQn 1 */
+
+  /* USER CODE END TIM1_TRG_COM_TIM11_IRQn 1 */
 }
 
 /**
@@ -284,7 +325,12 @@ void EXTI15_10_IRQHandler(void)
 	//BSP_LCD_DisplayStringAtLine(3, (uint8_t *)(toggle == 0 ? pog : champ)); 
 	//toggle = !toggle;
 	BSP_LCD_Clear(LCD_COLOR_WHITE);
+	serialPrintln("[Cirlce] Reset position and scale");
+	state = NONE;
 	BSP_LCD_FillCircle(150, 120, 50);
+	c.xPos = 150;
+	c.yPos = 120;
+	c.radius = 50;
   /* USER CODE END EXTI15_10_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(User_Button_Pin);
   /* USER CODE BEGIN EXTI15_10_IRQn 1 */
@@ -298,28 +344,42 @@ void EXTI15_10_IRQHandler(void)
 void TIM7_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM7_IRQn 0 */
-//	MPU6050_Get_Accel_RawData(&myAccelRaw);
-//	MPU6050_Get_Gyro_RawData(&myGyroRaw);
-//	
-//	MPU6050_Get_Accel_Scale(&myAccelScaled);
-//	MPU6050_Get_Gyro_Scale(&myGyroScaled);
-	
+
 	MPU6050_Read_All(&hi2c1, &MPU6050);
+	setStates();
 	
-	//i = (i+count) % count;
-	
-//	accelBuff[count] = MPU6050.Ax;
-//	count++;
-//	count = count > 64 ? 0 : count;
-	if(MPU6050.Ay > 1.0) {
-		serialPrintln("Moved Positive Y!");
-	} else if(MPU6050.Ay < -1.5) {
-		serialPrintln("Moved negative Y!");
+	switch(state) {
+		case NONE:
+			HAL_GPIO_WritePin(LED1_GPIO_PORT, LED1_PIN, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(LED2_GPIO_PORT, LED2_PIN, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(LED3_GPIO_PORT, LED3_PIN, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(LED4_GPIO_PORT, LED4_PIN, GPIO_PIN_RESET);
+		break;
+		case PITCH:
+			HAL_GPIO_WritePin(LED1_GPIO_PORT, LED1_PIN, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(LED2_GPIO_PORT, LED2_PIN, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(LED3_GPIO_PORT, LED3_PIN, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(LED4_GPIO_PORT, LED4_PIN, GPIO_PIN_RESET);
+		break;
+		case REVERB:
+			HAL_GPIO_WritePin(LED1_GPIO_PORT, LED1_PIN, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(LED2_GPIO_PORT, LED2_PIN, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(LED3_GPIO_PORT, LED3_PIN, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(LED4_GPIO_PORT, LED4_PIN, GPIO_PIN_RESET);
+		break;
+		case CHORUS:
+			HAL_GPIO_WritePin(LED1_GPIO_PORT, LED1_PIN, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(LED2_GPIO_PORT, LED2_PIN, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(LED3_GPIO_PORT, LED3_PIN, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(LED4_GPIO_PORT, LED4_PIN, GPIO_PIN_SET);
+		break;
 	}
+	
+	
   /* USER CODE END TIM7_IRQn 0 */
   HAL_TIM_IRQHandler(&htim7);
   /* USER CODE BEGIN TIM7_IRQn 1 */
-	//serialPrintln("TIM7\n");
+	
 	
   /* USER CODE END TIM7_IRQn 1 */
 }

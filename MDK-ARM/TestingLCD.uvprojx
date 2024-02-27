@@ -404,6 +404,11 @@
               <FilePath>Z:\ECC\Desktop\SD\MX\TestingLCD\Core\Src\voxart_dev.c</FilePath>
             </File>
             <File>
+              <FileName>imu_parser.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>Z:\ECC\Desktop\SD\MX\TestingLCD\Core\Src\imu_parser.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/main.c</FilePath>

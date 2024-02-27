@@ -28,6 +28,7 @@
 #include "mpu6050.h"
 #include "stm32f4xx_hal_uart.h"
 #include "voxart_dev.h"
+#include "imu_parser.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -53,6 +54,7 @@ I2C_HandleTypeDef hi2c1;
 
 TIM_HandleTypeDef htim7;
 TIM_HandleTypeDef htim10;
+TIM_HandleTypeDef htim11;
 
 UART_HandleTypeDef huart3;
 
@@ -62,6 +64,11 @@ SRAM_HandleTypeDef hsram1;
 int swap = 0;
 MPU6050_t MPU6050;
 circle c = {50, 150, 120};
+imuMovement imu = {0, 0, 0, false};
+float v_y = 0;
+float v_x = 0;
+float v_z = 0;
+uint16_t timestamp;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -73,6 +80,7 @@ static void MX_USART3_UART_Init(void);
 static void MX_TIM7_Init(void);
 static void MX_TIM10_Init(void);
 static void MX_FSMC_Init(void);
+static void MX_TIM11_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -114,11 +122,14 @@ int main(void)
   MX_TIM7_Init();
   MX_TIM10_Init();
   MX_FSMC_Init();
+  MX_TIM11_Init();
   /* USER CODE BEGIN 2 */
 	
 	BSP_LCD_DisplayOn();
 	
 	BSP_LCD_Clear(LCD_COLOR_CYAN);
+	
+	serialPrintln("\n\n+===Good morning!===+");
 	
 	BSP_LCD_DisplayStringAt(0, 50, (uint8_t *)"VoxART", CENTER_MODE); 
 	BSP_LCD_DisplayStringAt(0, 75, (uint8_t *)"Welcome.", CENTER_MODE); 
@@ -128,48 +139,54 @@ int main(void)
 	
 	BSP_LCD_Clear(LCD_COLOR_WHITE);
 	
-	serialPrintln("LCD ready");
+	serialPrintln("[LCD] READY");
 	
 	while (MPU6050_Init(&hi2c1) == 1) {
 		HAL_GPIO_TogglePin(LED1_GPIO_PORT, LED1_PIN);
-		//serialPrintln("MPU ERROR\n");
+		serialPrintln("[MPU6050] MPU ERROR. RESTART SYSTEM");
 		HAL_Delay(1000);
-		
-		BSP_LCD_DisplayStringAt(5, 75, (uint8_t *)"Power cycle :(", CENTER_MODE); 
-
+		BSP_LCD_DisplayStringAt(5, 75, (uint8_t *)"Power Cycle :(", CENTER_MODE); 
 	};
 	
-	HAL_TIM_Base_Start_IT(&htim7);
+	if(HAL_TIM_Base_Start_IT(&htim7) == HAL_OK) {
+		serialPrintln("[Timer] TIM7 ENABLED");
+	}
 
 	BSP_LCD_FillCircle(c.xPos, c.yPos, c.radius);
+	serialPrintln("[Circle] READY");
 	
-	HAL_TIM_Base_Start_IT(&htim10);
-	
+	if(HAL_TIM_Base_Start_IT(&htim10) == HAL_OK) {
+		serialPrintln("[Timer] TIM10 ENABLED");
+	}
+
+	if(HAL_TIM_Base_Start_IT(&htim11) == HAL_OK) {
+		serialPrintln("[Timer] TIM11 ENABLED");
+	}
+	timestamp = __HAL_TIM_GET_COUNTER(&htim11); 
+		
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
-  {
-		
+	{
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
 		
-//		char xPos[64];
-//		char yPos[64];
-//		char zPos[64];
-//		
-//		snprintf(xPos, sizeof(xPos), "%f", MPU6050.Ax);
-//		snprintf(yPos, sizeof(xPos), "%f", MPU6050.Ay);
-//		snprintf(zPos, sizeof(xPos), "%f", MPU6050.Az);
-//		
-//		BSP_LCD_DisplayStringAtLine(5, (uint8_t *)(char*)xPos);
-//		BSP_LCD_DisplayStringAtLine(6, (uint8_t *)(char*)yPos);
-//		BSP_LCD_DisplayStringAtLine(7, (uint8_t *)(char*)zPos);
-		//serialPrintIMU();
+//	char xPos[64];
+//	char yPos[64];
+//	char zPos[64];
 		
-	  //HAL_Delay(100);
+//	snprintf(xPos, sizeof(xPos), "%f", MPU6050.Ax);
+//	snprintf(yPos, sizeof(xPos), "%f", MPU6050.Ay);
+//	snprintf(zPos, sizeof(xPos), "%f", MPU6050.Az);
+//	
+//	BSP_LCD_DisplayStringAtLine(5, (uint8_t *)(char*)xPos);
+//	BSP_LCD_DisplayStringAtLine(6, (uint8_t *)(char*)yPos);
+//	BSP_LCD_DisplayStringAtLine(7, (uint8_t *)(char*)zPos);
+		//serialPrintIMU();
   }
   /* USER CODE END 3 */
 }
@@ -372,6 +389,37 @@ static void MX_TIM10_Init(void)
   /* USER CODE BEGIN TIM10_Init 2 */
 
   /* USER CODE END TIM10_Init 2 */
+
+}
+
+/**
+  * @brief TIM11 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM11_Init(void)
+{
+
+  /* USER CODE BEGIN TIM11_Init 0 */
+
+  /* USER CODE END TIM11_Init 0 */
+
+  /* USER CODE BEGIN TIM11_Init 1 */
+
+  /* USER CODE END TIM11_Init 1 */
+  htim11.Instance = TIM11;
+  htim11.Init.Prescaler = 99;
+  htim11.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim11.Init.Period = 839;
+  htim11.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim11.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim11) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM11_Init 2 */
+
+  /* USER CODE END TIM11_Init 2 */
 
 }
 
@@ -666,7 +714,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : PA0 */
   GPIO_InitStruct.Pin = GPIO_PIN_0;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
@@ -779,8 +827,7 @@ void Error_Handler(void)
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
   while (1)
-  {
-  }
+  {}
   /* USER CODE END Error_Handler_Debug */
 }
 
