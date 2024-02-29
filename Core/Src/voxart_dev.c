@@ -19,14 +19,12 @@ extern MPU6050_t MPU6050;
 /*********************** */
 /*   Private Variables   */
 /*********************** */
-#define MAX_Y 170
-#define MIN_Y 100
-#define MIN_X 40
-#define MAX_X 100
+#define MAX_Y 175
+#define MIN_Y 60
+#define MIN_X 0
+#define MAX_X 150
 #define MAX_RADIUS 100
 #define MIN_RADIUS 10
-bool update = true;
-
 /* ********************* */
 /*    Circle Control     */
 /* ********************* */
@@ -34,24 +32,22 @@ void updateCircle(int x, int y, int r) {
 	c.xPos += x;
 	c.yPos += y;
 	c.radius += r;
+	
 	if((c.radius > MAX_RADIUS) || (c.radius < MIN_RADIUS)) {
 		c.radius = c.radius > MAX_RADIUS ? MAX_RADIUS : MIN_RADIUS;
 	}
-	
+
 	if((c.yPos > MAX_Y) || (c.yPos < MIN_Y)) {
 		c.yPos = c.yPos > MAX_Y ? MAX_Y : MIN_Y;
 	}
-	
+
 	if(c.xPos > MAX_X || c.xPos < MIN_X) {
 		c.xPos = c.xPos > MAX_X ? MAX_X : MIN_X;
 	} 
 	
-	if(update) {
-		BSP_LCD_Clear(LCD_COLOR_WHITE);
-		BSP_LCD_FillCircle(c.xPos, c.yPos, c.radius);
-	}
-		//serialPrintln("Updated Circle!");
-//	}
+	
+	BSP_LCD_Clear(LCD_COLOR_WHITE);
+	BSP_LCD_FillCircle(c.xPos, c.yPos, c.radius);
 }
 
 /* ********************* */

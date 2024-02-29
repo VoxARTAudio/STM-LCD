@@ -33,11 +33,15 @@ testinglcd\stm324xg_eval.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sr
 testinglcd\stm324xg_eval.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_fsmc.h
 testinglcd\stm324xg_eval.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h
 testinglcd\stm324xg_eval.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h
+testinglcd\stm324xg_eval.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2s.h
+testinglcd\stm324xg_eval.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2s_ex.h
 testinglcd\stm324xg_eval.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 testinglcd\stm324xg_eval.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 testinglcd\stm324xg_eval.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 testinglcd\stm324xg_eval.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 testinglcd\stm324xg_eval.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
+testinglcd\stm324xg_eval.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h
+testinglcd\stm324xg_eval.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 testinglcd\stm324xg_eval.o: ..\Drivers\BSP\STM324xG_EVAL\stm324xg_eval_io.h
 testinglcd\stm324xg_eval.o: ..\Drivers\BSP\STM324xG_EVAL\../Components/stmpe811/stmpe811.h
 testinglcd\stm324xg_eval.o: ..\Drivers\BSP\STM324xG_EVAL\../Components/stmpe811/../Common/ts.h

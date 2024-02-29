@@ -1,11 +1,10 @@
 #include <stdbool.h>
 
-typedef struct imuMovement {
-	int x;
-	int y;
-	int z;
-	bool lock;
-} imuMovement;
+typedef enum {
+	NO,
+	POS,
+	NEG
+} lock;
 
 enum effectState {
 	NONE,
@@ -13,6 +12,13 @@ enum effectState {
 	REVERB,
 	CHORUS
 };
+
+typedef struct imuMovement {
+	int x;
+	int y;
+	int z;
+	lock l;
+} imuMovement;
 
 void parseReverbData(void);
 void parseChorusData(void);

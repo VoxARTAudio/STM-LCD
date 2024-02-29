@@ -34,11 +34,15 @@ testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sram.
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_fsmc.h
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h
+testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2s.h
+testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2s_ex.h
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
+testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h
+testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 testinglcd\voxart_dev.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 testinglcd\voxart_dev.o: ../Drivers/BSP/STM324xG_EVAL/stm324xg_eval_lcd.h
 testinglcd\voxart_dev.o: ../Drivers/BSP/STM324xG_EVAL/stm324xg_eval.h

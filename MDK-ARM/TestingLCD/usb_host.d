@@ -33,6 +33,8 @@ testinglcd\usb_host.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sram.h
 testinglcd\usb_host.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_fsmc.h
 testinglcd\usb_host.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h
 testinglcd\usb_host.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h
+testinglcd\usb_host.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2s.h
+testinglcd\usb_host.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2s_ex.h
 testinglcd\usb_host.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 testinglcd\usb_host.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 testinglcd\usb_host.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
@@ -54,12 +56,3 @@ testinglcd\usb_host.o: ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_ct
 testinglcd\usb_host.o: ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc.h
 testinglcd\usb_host.o: ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_bot.h
 testinglcd\usb_host.o: ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_scsi.h
-testinglcd\usb_host.o: ../Core/Inc/File_Handling.h
-testinglcd\usb_host.o: ../FATFS/App/fatfs.h
-testinglcd\usb_host.o: ../Middlewares/Third_Party/FatFs/src/ff.h
-testinglcd\usb_host.o: ../Middlewares/Third_Party/FatFs/src/integer.h
-testinglcd\usb_host.o: ../FATFS/Target/ffconf.h
-testinglcd\usb_host.o: ../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h
-testinglcd\usb_host.o: ../Middlewares/Third_Party/FatFs/src/diskio.h
-testinglcd\usb_host.o: ../FATFS/Target/usbh_diskio.h
-testinglcd\usb_host.o: ../Core/Inc/voxart_dev.h

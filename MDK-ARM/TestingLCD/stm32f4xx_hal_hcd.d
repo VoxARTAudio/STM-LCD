@@ -32,6 +32,8 @@ testinglcd\stm32f4xx_hal_hcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ha
 testinglcd\stm32f4xx_hal_hcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_fsmc.h
 testinglcd\stm32f4xx_hal_hcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h
 testinglcd\stm32f4xx_hal_hcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h
+testinglcd\stm32f4xx_hal_hcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2s.h
+testinglcd\stm32f4xx_hal_hcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2s_ex.h
 testinglcd\stm32f4xx_hal_hcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 testinglcd\stm32f4xx_hal_hcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 testinglcd\stm32f4xx_hal_hcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h

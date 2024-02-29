@@ -63,6 +63,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern HCD_HandleTypeDef hhcd_USB_OTG_FS;
 extern I2C_HandleTypeDef hi2c1;
 extern TIM_HandleTypeDef htim7;
 extern TIM_HandleTypeDef htim10;
@@ -242,7 +243,7 @@ void TIM1_UP_TIM10_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 0 */
 	if(state == PITCH) {
-		if(MPU6050.KalmanAngleY > 40 && MPU6050.KalmanAngleY < 80) {
+		if(MPU6050.KalmanAngleY > 30 && MPU6050.KalmanAngleY < 80) {
 			updateCircle(0, 0, 2);
 		}
 			
@@ -382,6 +383,20 @@ void TIM7_IRQHandler(void)
 	
 	
   /* USER CODE END TIM7_IRQn 1 */
+}
+
+/**
+  * @brief This function handles USB On The Go FS global interrupt.
+  */
+void OTG_FS_IRQHandler(void)
+{
+  /* USER CODE BEGIN OTG_FS_IRQn 0 */
+
+  /* USER CODE END OTG_FS_IRQn 0 */
+  HAL_HCD_IRQHandler(&hhcd_USB_OTG_FS);
+  /* USER CODE BEGIN OTG_FS_IRQn 1 */
+
+  /* USER CODE END OTG_FS_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

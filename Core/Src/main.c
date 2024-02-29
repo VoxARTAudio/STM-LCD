@@ -18,6 +18,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "fatfs.h"
+#include "usb_host.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -29,6 +31,7 @@
 #include "stm32f4xx_hal_uart.h"
 #include "voxart_dev.h"
 #include "imu_parser.h"
+#include "stm324xg_eval_audio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,6 +55,8 @@ ADC_HandleTypeDef hadc3;
 
 I2C_HandleTypeDef hi2c1;
 
+I2S_HandleTypeDef hi2s2;
+
 TIM_HandleTypeDef htim7;
 TIM_HandleTypeDef htim10;
 TIM_HandleTypeDef htim11;
@@ -64,11 +69,12 @@ SRAM_HandleTypeDef hsram1;
 int swap = 0;
 MPU6050_t MPU6050;
 circle c = {50, 150, 120};
-imuMovement imu = {0, 0, 0, false};
+imuMovement imu = {0, 0, 0, NO};
 float v_y = 0;
 float v_x = 0;
 float v_z = 0;
-uint16_t timestamp;
+extern ApplicationTypeDef Appli_state;
+//FIL MyFile;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -81,12 +87,25 @@ static void MX_TIM7_Init(void);
 static void MX_TIM10_Init(void);
 static void MX_FSMC_Init(void);
 static void MX_TIM11_Init(void);
+static void MX_I2S2_Init(void);
+void MX_USB_HOST_Process(void);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+//char* word = "Hello world";
+//static void FS_FileOperations(float x, float y, float z) {
+//	if(f_mount(&USBHFatFS, (TCHAR const*)USBHPath, 0) == FR_OK) {
+//		MyFile = fopen("STM32.TXT", "w");
+//		fprintf(MyFile, "%f, %f, %f\n", x, y, z);
+////		f_write(&MyFile, x, sizeof(wtext), (void *)&wbytes);
+////		f_write(&MyFile, y, sizeof(wtext), (void *)&wbytes);
+////		f_write(&MyFile, z, sizeof(wtext), (void *)&wbytes);
+//	}	
+//}
 /* USER CODE END 0 */
 
 /**
@@ -111,7 +130,12 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+//	while(BSP_AUDIO_OUT_Init(OUTPUT_DEVICE_BOTH, 50, 48000) == AUDIO_ERROR) {
+//		HAL_GPIO_TogglePin(LED1_GPIO_PORT, LED1_PIN);
+//		serialPrintln("[Audio] OUTPUT ERROR. RESTART SYSTEM");
+//		HAL_Delay(1000);
+//		BSP_LCD_DisplayStringAt(5, 75, (uint8_t *)"AUDIO ERROR :(", CENTER_MODE); 
+//	}
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -123,6 +147,9 @@ int main(void)
   MX_TIM10_Init();
   MX_FSMC_Init();
   MX_TIM11_Init();
+  MX_I2S2_Init();
+  MX_FATFS_Init();
+  MX_USB_HOST_Init();
   /* USER CODE BEGIN 2 */
 	
 	BSP_LCD_DisplayOn();
@@ -162,7 +189,6 @@ int main(void)
 	if(HAL_TIM_Base_Start_IT(&htim11) == HAL_OK) {
 		serialPrintln("[Timer] TIM11 ENABLED");
 	}
-	timestamp = __HAL_TIM_GET_COUNTER(&htim11); 
 		
 
   /* USER CODE END 2 */
@@ -172,6 +198,7 @@ int main(void)
   while (1)
 	{
     /* USER CODE END WHILE */
+    MX_USB_HOST_Process();
 
     /* USER CODE BEGIN 3 */
 		
@@ -305,7 +332,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 100000;
+  hi2c1.Init.ClockSpeed = 400000;
   hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -320,6 +347,40 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
+
+}
+
+/**
+  * @brief I2S2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_I2S2_Init(void)
+{
+
+  /* USER CODE BEGIN I2S2_Init 0 */
+
+  /* USER CODE END I2S2_Init 0 */
+
+  /* USER CODE BEGIN I2S2_Init 1 */
+
+  /* USER CODE END I2S2_Init 1 */
+  hi2s2.Instance = SPI2;
+  hi2s2.Init.Mode = I2S_MODE_MASTER_TX;
+  hi2s2.Init.Standard = I2S_STANDARD_PHILIPS;
+  hi2s2.Init.DataFormat = I2S_DATAFORMAT_16B;
+  hi2s2.Init.MCLKOutput = I2S_MCLKOUTPUT_DISABLE;
+  hi2s2.Init.AudioFreq = I2S_AUDIOFREQ_8K;
+  hi2s2.Init.CPOL = I2S_CPOL_LOW;
+  hi2s2.Init.ClockSource = I2S_CLOCK_PLL;
+  hi2s2.Init.FullDuplexMode = I2S_FULLDUPLEXMODE_DISABLE;
+  if (HAL_I2S_Init(&hi2s2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN I2S2_Init 2 */
+
+  /* USER CODE END I2S2_Init 2 */
 
 }
 
@@ -538,28 +599,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : USB_FS_DP_Pin USB_FS_DM_Pin USB_FS_ID_Pin */
-  GPIO_InitStruct.Pin = USB_FS_DP_Pin|USB_FS_DM_Pin|USB_FS_ID_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  GPIO_InitStruct.Alternate = GPIO_AF10_OTG_FS;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
   /*Configure GPIO pins : DCMI_D7_Pin DCMI_D6_Pin DCMI_VSYNC_Pin DCMI_D5_Pin */
   GPIO_InitStruct.Pin = DCMI_D7_Pin|DCMI_D6_Pin|DCMI_VSYNC_Pin|DCMI_D5_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.Alternate = GPIO_AF13_DCMI;
-  HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : I2S_SD_Pin I2S_WS_Pin */
-  GPIO_InitStruct.Pin = I2S_SD_Pin|I2S_WS_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
   HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
 
   /*Configure GPIO pin : IO_Expander_INT_Pin */
@@ -621,12 +666,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.Alternate = GPIO_AF13_DCMI;
   HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : VBUS_FS_Pin */
-  GPIO_InitStruct.Pin = VBUS_FS_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(VBUS_FS_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : MII_CRS_Pin MII_COL_Pin MII_RXD2_Pin MII_RXD3_Pin */
   GPIO_InitStruct.Pin = MII_CRS_Pin|MII_COL_Pin|MII_RXD2_Pin|MII_RXD3_Pin;

@@ -16,7 +16,6 @@ extern imuMovement imu;
 extern TIM_HandleTypeDef htim13;
 extern uint32_t timestamp;
 
-
 enum effectState state = NONE;
 
 void setStates() {
@@ -31,24 +30,27 @@ void parseReverbData() {
 	if (MPU6050.Ax > 1.2) {
 		//serialPrintln("Positive X");
 		imu.x = 1;
-		}
-	if(MPU6050.Ax < -1.5) {
+		imu.l = POS;
+	}
+	
+	if(MPU6050.Ax < -1.5 && imu.l != POS) {
 		//serialPrintln("Negative X");
 		imu.x = -1;
 	} 
 	if(MPU6050.Ax < 1.2 && MPU6050.Ax > -1) {
 		imu.x = 0;
+		imu.l = NO;
 	}
 }
 
 void parseChorusData() {
-	if(MPU6050.KalmanAngleX < -13) {
-		imu.y = -1;
-	}
-	if(MPU6050.KalmanAngleX > 30) {
+	if(MPU6050.KalmanAngleX < -10) {
 		imu.y = 1;
 	}
-	if(MPU6050.KalmanAngleX > -5 && MPU6050.KalmanAngleX < 30) {
+	if(MPU6050.KalmanAngleX > 25) {
+		imu.y = -1;
+	}
+	if(MPU6050.KalmanAngleX > -5 && MPU6050.KalmanAngleX < 25) {
 		imu.y = 0;
 	}
 }
