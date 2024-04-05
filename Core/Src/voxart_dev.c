@@ -1,12 +1,19 @@
-#include "voxart_dev.h"
-#include "main.h"
+//C COMMON
+#include <stdbool.h>
+#include <stdbool.h>
 #include <string.h>
-#include "stm324xg_eval_lcd.h"
-#include "stm324xg_eval_io.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+//MISC
+#include "voxart_dev.h"
+#include "main.h"
 #include "mpu6050.h"
-#include <stdbool.h>
+
+//BSP
+#include "stm324xg_eval_lcd.h"
+#include "stm324xg_eval_io.h"
+
 
 /*********************** */
 /*    Extern Variables   */ 
@@ -45,7 +52,6 @@ void updateCircle(int x, int y, int r) {
 		c.xPos = c.xPos > MAX_X ? MAX_X : MIN_X;
 	} 
 	
-	
 	BSP_LCD_Clear(LCD_COLOR_WHITE);
 	BSP_LCD_FillCircle(c.xPos, c.yPos, c.radius);
 }
@@ -55,14 +61,14 @@ void updateCircle(int x, int y, int r) {
 /* ********************* */
 void serialPrint(char* msg) {
 	uint8_t MSG[35] = {'\0'};
-	//uint8_t X = 0;
+
 	sprintf(MSG, "%s", msg);
 	HAL_UART_Transmit(&huart3, MSG, sizeof(MSG), 100);
 }
 
 void serialPrintln(char* msg) {
 	uint8_t MSG[35] = {'\0'};
-	//uint8_t X = 0;
+
 	char* fstring = malloc(strlen(msg) + 4);
 	strcpy(fstring, msg);
 	strcat(fstring, "\r\n");
@@ -82,7 +88,7 @@ void serialPrintIMU() {
 	
 	uint8_t MSG[100] = {'\0'};
 	//uint8_t X = 0;
-	sprintf(MSG, "x: %0.1f  y: %0.1f  z: %0.1f\n", MPU6050.Ax, MPU6050.Ay, MPU6050.Az);
+	sprintf(MSG, "x: %0.1f  y: %0.1f  z: %0.1f\r\n", MPU6050.Ax, MPU6050.Ay, MPU6050.Az);
 	HAL_UART_Transmit(&huart3, MSG, sizeof(MSG), 100);
 }
 	

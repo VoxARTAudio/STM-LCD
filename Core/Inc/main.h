@@ -31,7 +31,6 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -196,6 +195,8 @@ void Error_Handler(void);
 #define A14_GPIO_Port GPIOG
 #define A13_Pin GPIO_PIN_3
 #define A13_GPIO_Port GPIOG
+#define MIC_Pin GPIO_PIN_10
+#define MIC_GPIO_Port GPIOF
 #define DCMI_D2_Pin GPIO_PIN_11
 #define DCMI_D2_GPIO_Port GPIOH
 #define DCMI_D1_Pin GPIO_PIN_10

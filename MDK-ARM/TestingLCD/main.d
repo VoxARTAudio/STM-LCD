@@ -72,11 +72,12 @@ testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/stm324xg_eval_io.h
 testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/../Components/stmpe811/stmpe811.h
 testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/../Components/stmpe811/../Common/ts.h
 testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/../Components/stmpe811/../Common/io.h
+testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/stm324xg_eval_audio.h
+testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/../Components/cs43l22/cs43l22.h
+testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/../Components/cs43l22/../Common/audio.h
+testinglcd\main.o: ../Core/Inc/audio_if.h
 testinglcd\main.o: ../Core/Inc/mpu6050.h
 testinglcd\main.o: ../Core/Inc/i2c.h
 testinglcd\main.o: ../Core/Inc/voxart_dev.h
 testinglcd\main.o: ../Core/Inc/imu_parser.h
 testinglcd\main.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
-testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/stm324xg_eval_audio.h
-testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/../Components/cs43l22/cs43l22.h
-testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/../Components/cs43l22/../Common/audio.h

@@ -90,6 +90,7 @@ Driver architecture:
 #include "stm324xg_eval_audio.h"
 #include "stm324xg_eval_io.h" /* IOExpander driver is included in order to allow 
                                  CS43L22 codec reset pin management on the evaluation board */
+#include "voxart_dev.h"
 /** @addtogroup BSP
   * @{
   */
@@ -209,13 +210,16 @@ void BSP_AUDIO_OUT_DeInit(void)
   */
 uint8_t BSP_AUDIO_OUT_Play(uint16_t* pBuffer, uint32_t Size)
 {
+	serialPrintln("BSP_AUDIO_OUT_Play");
   /* Call the audio Codec Play function */
   if(audio_drv->Play(AUDIO_I2C_ADDRESS, pBuffer, Size) != 0)
   {
+		serialPrintln("AUDIO ERROR DRIVER I2C CONFIG");
     return AUDIO_ERROR;
   }
   else
   {
+		serialPrintln("AUDIO I2S Transmit");
     /* Update the Media layer and enable it for play */  
     HAL_I2S_Transmit_DMA(&haudio_i2s, pBuffer, DMA_MAX(Size/AUDIODATA_SIZE));
     return AUDIO_OK;

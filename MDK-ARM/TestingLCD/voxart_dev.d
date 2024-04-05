@@ -1,4 +1,8 @@
 testinglcd\voxart_dev.o: Z:\ECC\Desktop\SD\MX\TestingLCD\Core\Src\voxart_dev.c
+testinglcd\voxart_dev.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+testinglcd\voxart_dev.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+testinglcd\voxart_dev.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+testinglcd\voxart_dev.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 testinglcd\voxart_dev.o: ../Core/Inc/voxart_dev.h
 testinglcd\voxart_dev.o: ../Core/Inc/main.h
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
@@ -43,7 +47,8 @@ testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_e
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
-testinglcd\voxart_dev.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+testinglcd\voxart_dev.o: ../Core/Inc/mpu6050.h
+testinglcd\voxart_dev.o: ../Core/Inc/i2c.h
 testinglcd\voxart_dev.o: ../Drivers/BSP/STM324xG_EVAL/stm324xg_eval_lcd.h
 testinglcd\voxart_dev.o: ../Drivers/BSP/STM324xG_EVAL/stm324xg_eval.h
 testinglcd\voxart_dev.o: ../Drivers/BSP/STM324xG_EVAL/../Components/ili9325/ili9325.h
@@ -53,8 +58,3 @@ testinglcd\voxart_dev.o: ../Drivers/BSP/STM324xG_EVAL/stm324xg_eval_io.h
 testinglcd\voxart_dev.o: ../Drivers/BSP/STM324xG_EVAL/../Components/stmpe811/stmpe811.h
 testinglcd\voxart_dev.o: ../Drivers/BSP/STM324xG_EVAL/../Components/stmpe811/../Common/ts.h
 testinglcd\voxart_dev.o: ../Drivers/BSP/STM324xG_EVAL/../Components/stmpe811/../Common/io.h
-testinglcd\voxart_dev.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
-testinglcd\voxart_dev.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-testinglcd\voxart_dev.o: ../Core/Inc/mpu6050.h
-testinglcd\voxart_dev.o: ../Core/Inc/i2c.h
-testinglcd\voxart_dev.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

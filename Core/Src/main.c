@@ -23,15 +23,25 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "stm324xg_eval_lcd.h"
-#include "stm324xg_eval_io.h"
+// C COMMON
 #include <stdio.h>
 #include <stdlib.h>
-#include "mpu6050.h"
+
+//BSP & HAL
+#include "stm324xg_eval_lcd.h"
+#include "stm324xg_eval_io.h"
+#include "stm324xg_eval_audio.h"
 #include "stm32f4xx_hal_uart.h"
+
+//AUDIO
+#include "audio_if.h"
+
+//IMU
+#include "mpu6050.h"
+
+// CUSTOM
 #include "voxart_dev.h"
 #include "imu_parser.h"
-#include "stm324xg_eval_audio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -41,12 +51,16 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define SAMPLE_PERIOD (0.01f)
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+__IO uint32_t uwCommand = AUDIO_PAUSE;
+__IO uint32_t uwVolume = AUDIO_DEFAULT_VOLUME;
+
+/* Variable to indicate that push buttons will be used for switching between 
+   Headphone and Speaker output modes. */
+uint32_t uwSpHpSwitch = 0;
 
 /* USER CODE END PM */
 
@@ -56,6 +70,7 @@ ADC_HandleTypeDef hadc3;
 I2C_HandleTypeDef hi2c1;
 
 I2S_HandleTypeDef hi2s2;
+DMA_HandleTypeDef hdma_spi2_tx;
 
 TIM_HandleTypeDef htim7;
 TIM_HandleTypeDef htim10;
@@ -66,13 +81,9 @@ UART_HandleTypeDef huart3;
 SRAM_HandleTypeDef hsram1;
 
 /* USER CODE BEGIN PV */
-int swap = 0;
 MPU6050_t MPU6050;
 circle c = {50, 150, 120};
 imuMovement imu = {0, 0, 0, NO};
-float v_y = 0;
-float v_x = 0;
-float v_z = 0;
 extern ApplicationTypeDef Appli_state;
 //FIL MyFile;
 /* USER CODE END PV */
@@ -80,32 +91,23 @@ extern ApplicationTypeDef Appli_state;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_ADC3_Init(void);
-static void MX_I2C1_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_TIM7_Init(void);
 static void MX_TIM10_Init(void);
 static void MX_FSMC_Init(void);
 static void MX_TIM11_Init(void);
 static void MX_I2S2_Init(void);
+static void MX_I2C1_Init(void);
 void MX_USB_HOST_Process(void);
 
 /* USER CODE BEGIN PFP */
-
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-//char* word = "Hello world";
-//static void FS_FileOperations(float x, float y, float z) {
-//	if(f_mount(&USBHFatFS, (TCHAR const*)USBHPath, 0) == FR_OK) {
-//		MyFile = fopen("STM32.TXT", "w");
-//		fprintf(MyFile, "%f, %f, %f\n", x, y, z);
-////		f_write(&MyFile, x, sizeof(wtext), (void *)&wbytes);
-////		f_write(&MyFile, y, sizeof(wtext), (void *)&wbytes);
-////		f_write(&MyFile, z, sizeof(wtext), (void *)&wbytes);
-//	}	
-//}
+AUDIO_ErrorTypeDef startAud;
 /* USER CODE END 0 */
 
 /**
@@ -124,6 +126,7 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 	BSP_LCD_Init();
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -136,12 +139,13 @@ int main(void)
 //		HAL_Delay(1000);
 //		BSP_LCD_DisplayStringAt(5, 75, (uint8_t *)"AUDIO ERROR :(", CENTER_MODE); 
 //	}
+
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_ADC3_Init();
-  MX_I2C1_Init();
   MX_USART3_UART_Init();
   MX_TIM7_Init();
   MX_TIM10_Init();
@@ -150,22 +154,31 @@ int main(void)
   MX_I2S2_Init();
   MX_FATFS_Init();
   MX_USB_HOST_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
+	
+
 	
 	BSP_LCD_DisplayOn();
 	
 	BSP_LCD_Clear(LCD_COLOR_CYAN);
 	
-	serialPrintln("\n\n+===Good morning!===+");
+	serialPrintln("\n\n+===Good Morning!===+");
 	
 	BSP_LCD_DisplayStringAt(0, 50, (uint8_t *)"VoxART", CENTER_MODE); 
 	BSP_LCD_DisplayStringAt(0, 75, (uint8_t *)"Welcome.", CENTER_MODE); 
 	HAL_ADC_Start(&hadc3);
-
+	
 	HAL_Delay(1500);
 	
 	BSP_LCD_Clear(LCD_COLOR_WHITE);
 	
+//	if(AUDIO_Init() == AUDIO_ERROR_NONE) {
+//		serialPrintln("Audio INIT Success!");
+//	} else {
+//		serialPrintln("AUDIO CODEC  FAIL");
+//	}
+//	
 	serialPrintln("[LCD] READY");
 	
 	while (MPU6050_Init(&hi2c1) == 1) {
@@ -189,8 +202,11 @@ int main(void)
 	if(HAL_TIM_Base_Start_IT(&htim11) == HAL_OK) {
 		serialPrintln("[Timer] TIM11 ENABLED");
 	}
-		
-
+	
+	serialPrintln("Allen was here");
+	
+//	startAud = AUDIO_Start();
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -202,19 +218,35 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 		
-//	char xPos[64];
-//	char yPos[64];
-//	char zPos[64];
+		// PLAYING WAV FILE CODE STARTS HERE
+		if(Appli_state == APPLICATION_START) {
+			BSP_LCD_ClearStringLine(6);
+			BSP_LCD_DisplayStringAtLine(6, (uint8_t *)"USB CONNECT"); 
+			serialPrintln("USB CONNECTED");
+		} else if(Appli_state == APPLICATION_DISCONNECT) {
+			BSP_LCD_ClearStringLine(6);
+			BSP_LCD_DisplayStringAtLine(6, (uint8_t *)"USB DISCONNECT");
+			serialPrintln("USB DISCONNECTED");			
+		}
+		if(Appli_state == APPLICATION_READY) {
+			serialPrintln("USB APPLICATION READY");
+			
+/*		Bad USB Code*	
+			if(!diskMounted) {
+				f_mount(&USBHFatFS, (const TCHAR*)USBHPath, 0);
+				diskMounted = 1;
+				//BSP_LCD_ClearStringLine(6);
+				serialPrintln("USB MOUNTED");
+				BSP_LCD_DisplayStringAtLine(6, (uint8_t *)"USB MOUNTED"); 
+				}
+			BSP_LCD_DisplayStringAtLine(6, (uint8_t *)"STARTING...");
+			serialPrintln("STARTING");
+			WavePlayerStart("", rfilename); 
+			*/
+		}
 		
-//	snprintf(xPos, sizeof(xPos), "%f", MPU6050.Ax);
-//	snprintf(yPos, sizeof(xPos), "%f", MPU6050.Ay);
-//	snprintf(zPos, sizeof(xPos), "%f", MPU6050.Az);
-//	
-//	BSP_LCD_DisplayStringAtLine(5, (uint8_t *)(char*)xPos);
-//	BSP_LCD_DisplayStringAtLine(6, (uint8_t *)(char*)yPos);
-//	BSP_LCD_DisplayStringAtLine(7, (uint8_t *)(char*)zPos);
-		//serialPrintIMU();
-  }
+	}
+		
   /* USER CODE END 3 */
 }
 
@@ -369,8 +401,8 @@ static void MX_I2S2_Init(void)
   hi2s2.Init.Mode = I2S_MODE_MASTER_TX;
   hi2s2.Init.Standard = I2S_STANDARD_PHILIPS;
   hi2s2.Init.DataFormat = I2S_DATAFORMAT_16B;
-  hi2s2.Init.MCLKOutput = I2S_MCLKOUTPUT_DISABLE;
-  hi2s2.Init.AudioFreq = I2S_AUDIOFREQ_8K;
+  hi2s2.Init.MCLKOutput = I2S_MCLKOUTPUT_ENABLE;
+  hi2s2.Init.AudioFreq = I2S_AUDIOFREQ_44K;
   hi2s2.Init.CPOL = I2S_CPOL_LOW;
   hi2s2.Init.ClockSource = I2S_CLOCK_PLL;
   hi2s2.Init.FullDuplexMode = I2S_FULLDUPLEXMODE_DISABLE;
@@ -514,6 +546,22 @@ static void MX_USART3_UART_Init(void)
   /* USER CODE BEGIN USART3_Init 2 */
 
   /* USER CODE END USART3_Init 2 */
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Stream4_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream4_IRQn);
 
 }
 

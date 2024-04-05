@@ -3,6 +3,7 @@
 "testinglcd\mpu6050.o"
 "testinglcd\voxart_dev.o"
 "testinglcd\imu_parser.o"
+"testinglcd\audio_if.o"
 "testinglcd\main.o"
 "testinglcd\stm32f4xx_it.o"
 "testinglcd\stm32f4xx_hal_msp.o"

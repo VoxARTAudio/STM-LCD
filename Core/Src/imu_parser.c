@@ -20,24 +20,26 @@ enum effectState state = NONE;
 
 void setStates() {
 	if(MPU6050.KalmanAngleX > -10 && MPU6050.KalmanAngleX < 10 && MPU6050.KalmanAngleY > -10 && MPU6050.KalmanAngleY < 10 && state != PITCH) {
+		state = NONE;
+	} else if(MPU6050.KalmanAngleX > -10 && MPU6050.KalmanAngleX < 6 && MPU6050.KalmanAngleY > 100 && MPU6050.KalmanAngleY < 120 && state != PITCH) {
 		state = REVERB;
-	} else if(MPU6050.KalmanAngleY < -175 && MPU6050.KalmanAngleY > -181 && state != PITCH) {
+	} else if(MPU6050.KalmanAngleX > -5 && MPU6050.KalmanAngleX < 5 && MPU6050.KalmanAngleY < -175 && MPU6050.KalmanAngleY > -181 && state != PITCH) {
 		state = CHORUS;
 	}
 }
 
 void parseReverbData() {
-	if (MPU6050.Ax > 1.2) {
+	if (MPU6050.Az > 1.2) {
 		//serialPrintln("Positive X");
 		imu.x = 1;
 		imu.l = POS;
 	}
 	
-	if(MPU6050.Ax < -1.5 && imu.l != POS) {
+	if(MPU6050.Az < -1.5 && imu.l != POS) {
 		//serialPrintln("Negative X");
 		imu.x = -1;
 	} 
-	if(MPU6050.Ax < 1.2 && MPU6050.Ax > -1) {
+	if(MPU6050.Az < 1.2 && MPU6050.Az > -1) {
 		imu.x = 0;
 		imu.l = NO;
 	}

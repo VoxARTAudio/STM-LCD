@@ -49,3 +49,4 @@ testinglcd\stm324xg_eval_audio.o: Z:\ECC\Desktop\SD\MX\TestingLCD\Drivers\BSP\ST
 testinglcd\stm324xg_eval_audio.o: Z:\ECC\Desktop\SD\MX\TestingLCD\Drivers\BSP\STM324xG_EVAL\../Components/stmpe811/stmpe811.h
 testinglcd\stm324xg_eval_audio.o: Z:\ECC\Desktop\SD\MX\TestingLCD\Drivers\BSP\STM324xG_EVAL\../Components/stmpe811/../Common/ts.h
 testinglcd\stm324xg_eval_audio.o: Z:\ECC\Desktop\SD\MX\TestingLCD\Drivers\BSP\STM324xG_EVAL\../Components/stmpe811/../Common/io.h
+testinglcd\stm324xg_eval_audio.o: ../Core/Inc/voxart_dev.h
