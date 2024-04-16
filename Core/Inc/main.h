@@ -225,8 +225,6 @@ void Error_Handler(void);
 #define A18_GPIO_Port GPIOD
 #define MII_RX_CLK_RMII_REF_CLK_Pin GPIO_PIN_1
 #define MII_RX_CLK_RMII_REF_CLK_GPIO_Port GPIOA
-#define Audio_DAC_OUT_Pin GPIO_PIN_4
-#define Audio_DAC_OUT_GPIO_Port GPIOA
 #define MII_RXD0_Pin GPIO_PIN_4
 #define MII_RXD0_GPIO_Port GPIOC
 #define A7_Pin GPIO_PIN_13
@@ -291,6 +289,7 @@ void Error_Handler(void);
 #define MII_INT_Pin GPIO_PIN_14
 #define MII_INT_GPIO_Port GPIOB
 #define MII_INT_EXTI_IRQn EXTI15_10_IRQn
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

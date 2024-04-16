@@ -1,7 +1,7 @@
-testinglcd\mpu6050.o: Z:\ECC\Desktop\SD\MX\TestingLCD\Core\Src\mpu6050.c
-testinglcd\mpu6050.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+testinglcd\mpu6050.o: ..\Core\Src\mpu6050.c
+testinglcd\mpu6050.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\math.h
 testinglcd\mpu6050.o: ../Core/Inc/mpu6050.h
-testinglcd\mpu6050.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+testinglcd\mpu6050.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdint.h
 testinglcd\mpu6050.o: ../Core/Inc/i2c.h
 testinglcd\mpu6050.o: ../Core/Inc/main.h
 testinglcd\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
@@ -18,7 +18,7 @@ testinglcd\mpu6050.o: ../Drivers/CMSIS/Include/mpu_armv7.h
 testinglcd\mpu6050.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
 testinglcd\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 testinglcd\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-testinglcd\mpu6050.o: C:\Apps\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+testinglcd\mpu6050.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stddef.h
 testinglcd\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h
 testinglcd\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
 testinglcd\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h
@@ -29,6 +29,8 @@ testinglcd\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h
 testinglcd\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h
 testinglcd\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h
 testinglcd\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h
+testinglcd\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dac.h
+testinglcd\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dac_ex.h
 testinglcd\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
 testinglcd\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
 testinglcd\mpu6050.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
