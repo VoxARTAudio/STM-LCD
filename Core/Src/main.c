@@ -18,8 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "fatfs.h"
-#include "usb_host.h"
+#include "app_touchgfx.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -67,6 +66,8 @@ uint32_t uwSpHpSwitch = 0;
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc3;
 
+CRC_HandleTypeDef hcrc;
+
 DAC_HandleTypeDef hdac;
 DMA_HandleTypeDef hdma_dac1;
 
@@ -87,8 +88,6 @@ SRAM_HandleTypeDef hsram1;
 MPU6050_t MPU6050;
 circle c = {50, 150, 120};
 imuMovement imu = {0, 0, 0, NO};
-extern ApplicationTypeDef Appli_state;
-//FIL MyFile;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -104,8 +103,7 @@ static void MX_TIM11_Init(void);
 static void MX_I2S2_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_DAC_Init(void);
-void MX_USB_HOST_Process(void);
-
+static void MX_CRC_Init(void);
 /* USER CODE BEGIN PFP */
 /* USER CODE END PFP */
 
@@ -157,41 +155,32 @@ int main(void)
   MX_FSMC_Init();
   MX_TIM11_Init();
   MX_I2S2_Init();
-  MX_FATFS_Init();
-  MX_USB_HOST_Init();
   MX_I2C1_Init();
   MX_DAC_Init();
+  MX_CRC_Init();
+  MX_TouchGFX_Init();
   /* USER CODE BEGIN 2 */
 	
-
-	
 	BSP_LCD_DisplayOn();
-	
-	BSP_LCD_Clear(LCD_COLOR_CYAN);
-	
+	HAL_Delay(50);
+	BSP_LCD_Clear(LCD_COLOR_WHITE);
+	BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
+		
 	serialPrintln("\n\n+===Good Morning!===+");
 	
-	BSP_LCD_DisplayStringAt(0, 50, (uint8_t *)"VoxART", CENTER_MODE); 
-	BSP_LCD_DisplayStringAt(0, 75, (uint8_t *)"Welcome.", CENTER_MODE); 
+	BSP_LCD_DisplayStringAtLine(1, ( uint8_t *)"      VoxArt      "); 
 	HAL_ADC_Start(&hadc3);
 	
-	HAL_Delay(1500);
+	HAL_Delay(1000);
 	
-	BSP_LCD_Clear(LCD_COLOR_WHITE);
-	
-//	if(AUDIO_Init() == AUDIO_ERROR_NONE) {
-//		serialPrintln("Audio INIT Success!");
-//	} else {
-//		serialPrintln("AUDIO CODEC  FAIL");
-//	}
-//	
 	serialPrintln("[LCD] READY");
 	
-	while (MPU6050_Init(&hi2c1) == 1) {
-		HAL_GPIO_TogglePin(LED1_GPIO_PORT, LED1_PIN);
+	if(MPU6050_Init(&hi2c1) == 1) {
+		BSP_LCD_SetTextColor(LCD_COLOR_RED);
+		BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"   Power Cycle :(   "); 
+		HAL_GPIO_TogglePin(LED4_GPIO_PORT, LED4_PIN);
 		serialPrintln("[MPU6050] MPU ERROR. RESTART SYSTEM");
-		HAL_Delay(1000);
-		BSP_LCD_DisplayStringAt(5, 75, (uint8_t *)"Power Cycle :(", CENTER_MODE); 
+		while(1) {}
 	};
 	
 	if(HAL_TIM_Base_Start_IT(&htim7) == HAL_OK) {
@@ -220,39 +209,11 @@ int main(void)
   while (1)
 	{
     /* USER CODE END WHILE */
-    MX_USB_HOST_Process();
 
+  MX_TouchGFX_Process();
     /* USER CODE BEGIN 3 */
 		
-		// PLAYING WAV FILE CODE STARTS HERE
-		if(Appli_state == APPLICATION_START) {
-			BSP_LCD_ClearStringLine(6);
-			BSP_LCD_DisplayStringAtLine(6, (uint8_t *)"USB CONNECT"); 
-			serialPrintln("USB CONNECTED");
-		} else if(Appli_state == APPLICATION_DISCONNECT) {
-			BSP_LCD_ClearStringLine(6);
-			BSP_LCD_DisplayStringAtLine(6, (uint8_t *)"USB DISCONNECT");
-			serialPrintln("USB DISCONNECTED");			
-		}
-		if(Appli_state == APPLICATION_READY) {
-			serialPrintln("USB APPLICATION READY");
-			
-/*		Bad USB Code*	
-			if(!diskMounted) {
-				f_mount(&USBHFatFS, (const TCHAR*)USBHPath, 0);
-				diskMounted = 1;
-				//BSP_LCD_ClearStringLine(6);
-				serialPrintln("USB MOUNTED");
-				BSP_LCD_DisplayStringAtLine(6, (uint8_t *)"USB MOUNTED"); 
-				}
-			BSP_LCD_DisplayStringAtLine(6, (uint8_t *)"STARTING...");
-			serialPrintln("STARTING");
-			WavePlayerStart("", rfilename); 
-			*/
-		}
-		
 	}
-		
   /* USER CODE END 3 */
 }
 
@@ -355,6 +316,32 @@ static void MX_ADC3_Init(void)
 }
 
 /**
+  * @brief CRC Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_CRC_Init(void)
+{
+
+  /* USER CODE BEGIN CRC_Init 0 */
+
+  /* USER CODE END CRC_Init 0 */
+
+  /* USER CODE BEGIN CRC_Init 1 */
+
+  /* USER CODE END CRC_Init 1 */
+  hcrc.Instance = CRC;
+  if (HAL_CRC_Init(&hcrc) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN CRC_Init 2 */
+
+  /* USER CODE END CRC_Init 2 */
+
+}
+
+/**
   * @brief DAC Initialization Function
   * @param None
   * @retval None
@@ -410,7 +397,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 400000;
+  hi2c1.Init.ClockSpeed = 100000;
   hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -451,7 +438,7 @@ static void MX_I2S2_Init(void)
   hi2s2.Init.AudioFreq = I2S_AUDIOFREQ_44K;
   hi2s2.Init.CPOL = I2S_CPOL_LOW;
   hi2s2.Init.ClockSource = I2S_CLOCK_PLL;
-  hi2s2.Init.FullDuplexMode = I2S_FULLDUPLEXMODE_DISABLE;
+  hi2s2.Init.FullDuplexMode = I2S_FULLDUPLEXMODE_ENABLE;
   if (HAL_I2S_Init(&hi2s2) != HAL_OK)
   {
     Error_Handler();
@@ -698,6 +685,14 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
+  /*Configure GPIO pins : USB_FS_DP_Pin USB_FS_DM_Pin USB_FS_ID_Pin */
+  GPIO_InitStruct.Pin = USB_FS_DP_Pin|USB_FS_DM_Pin|USB_FS_ID_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Alternate = GPIO_AF10_OTG_FS;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
   /*Configure GPIO pins : DCMI_D7_Pin DCMI_D6_Pin DCMI_VSYNC_Pin DCMI_D5_Pin */
   GPIO_InitStruct.Pin = DCMI_D7_Pin|DCMI_D6_Pin|DCMI_VSYNC_Pin|DCMI_D5_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -766,6 +761,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF13_DCMI;
   HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : VBUS_FS_Pin */
+  GPIO_InitStruct.Pin = VBUS_FS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(VBUS_FS_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pins : MII_CRS_Pin MII_COL_Pin MII_RXD2_Pin MII_RXD3_Pin */
   GPIO_InitStruct.Pin = MII_CRS_Pin|MII_COL_Pin|MII_RXD2_Pin|MII_RXD3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -826,10 +827,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF10_OTG_HS;
   HAL_GPIO_Init(ULPI_STP_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : MII_MDC_Pin MII_TXD2_Pin MII_TX_CLK_Pin MII_RXD0_Pin
-                           MII_RXD1_Pin */
-  GPIO_InitStruct.Pin = MII_MDC_Pin|MII_TXD2_Pin|MII_TX_CLK_Pin|MII_RXD0_Pin
-                          |MII_RXD1_Pin;
+  /*Configure GPIO pins : MII_MDC_Pin MII_RXD0_Pin MII_RXD1_Pin */
+  GPIO_InitStruct.Pin = MII_MDC_Pin|MII_RXD0_Pin|MII_RXD1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -914,10 +913,10 @@ static void MX_FSMC_Init(void)
   hsram1.Instance = FSMC_NORSRAM_DEVICE;
   hsram1.Extended = FSMC_NORSRAM_EXTENDED_DEVICE;
   /* hsram1.Init */
-  hsram1.Init.NSBank = FSMC_NORSRAM_BANK1;
+  hsram1.Init.NSBank = FSMC_NORSRAM_BANK3;
   hsram1.Init.DataAddressMux = FSMC_DATA_ADDRESS_MUX_DISABLE;
   hsram1.Init.MemoryType = FSMC_MEMORY_TYPE_SRAM;
-  hsram1.Init.MemoryDataWidth = FSMC_NORSRAM_MEM_BUS_WIDTH_8;
+  hsram1.Init.MemoryDataWidth = FSMC_NORSRAM_MEM_BUS_WIDTH_16;
   hsram1.Init.BurstAccessMode = FSMC_BURST_ACCESS_MODE_DISABLE;
   hsram1.Init.WaitSignalPolarity = FSMC_WAIT_SIGNAL_POLARITY_LOW;
   hsram1.Init.WrapMode = FSMC_WRAP_MODE_DISABLE;

@@ -205,7 +205,7 @@ sFONT *BSP_LCD_GetFont(void)
 }
 
 /**
-  * @brief  Clears the hole LCD.
+  * @brief  Clears the 'hole' LCD.
   * @param  Color: Color of the background
   */
 void BSP_LCD_Clear(uint16_t Color)

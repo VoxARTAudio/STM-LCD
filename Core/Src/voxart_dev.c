@@ -14,7 +14,6 @@
 #include "stm324xg_eval_lcd.h"
 #include "stm324xg_eval_io.h"
 
-
 /*********************** */
 /*    Extern Variables   */ 
 /*********************** */
@@ -26,6 +25,7 @@ extern MPU6050_t MPU6050;
 /*********************** */
 /*   Private Variables   */
 /*********************** */
+//Circle Min and Max
 #define MAX_Y 175
 #define MIN_Y 60
 #define MIN_X 0

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextDatabase xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="texts.xsd" Version="4.23.2">
+  <Languages>
+    <Language Id="GB" />
+    <Language Id="KR" />
+    <Language Id="CN" />
+    <Language Id="JP" />
+    <Language Id="DK" />
+    <Language Id="FR" />
+    <Language Id="TN" />
+  </Languages>
+  <Texts>
+    <TextGroup Id="Group1">
+      <Text Id="joystickNote" Alignment="Center" TypographyId="small_C">
+        <Translation Language="GB">&#10;swipe or&#10;&#10;use joystick&#10;&#10;to navigate</Translation>
+        <Translation Language="KR" Alignment="Center">&#10;스 와이프 또는&#10;&#10;조이스틱 사용&#10;&#10;길을 찾다</Translation>
+        <Translation Language="CN">滑動或&#10;&#10;使用操縱桿&#10;&#10;導航</Translation>
+        <Translation Language="JP">スワイプまたは&#10;&#10;ジョイスティックを使う&#10;&#10;ナビゲートする</Translation>
+        <Translation Language="DK" Alignment="Center">swipe eller&#10;&#10;brug joystick&#10;&#10;at navigere</Translation>
+        <Translation Language="FR">swipe ou&#10;&#10;utiliser la manette&#10;&#10;naviguer</Translation>
+        <Translation Language="TN" Alignment="Center">انتقد أو&#10;استخدم عصا التحكم&#10;للملاحه</Translation>
+      </Text>
+      <Text Id="language0" Alignment="Left" TypographyId="small_C">
+        <Translation Language="GB">Dansk</Translation>
+        <Translation Language="KR">Dansk</Translation>
+        <Translation Language="CN">Dansk</Translation>
+        <Translation Language="JP">Dansk</Translation>
+        <Translation Language="DK">Dansk</Translation>
+        <Translation Language="FR">Dansk</Translation>
+        <Translation Language="TN">Dansk</Translation>
+      </Text>
+      <Text Id="languageHeadline" Alignment="Center" TypographyId="small_B">
+        <Translation Language="GB">Select Language</Translation>
+        <Translation Language="KR">언어 선택</Translation>
+        <Translation Language="CN">选择语言</Translation>
+        <Translation Language="JP">言語選択</Translation>
+        <Translation Language="DK">Vælg Sprog</Translation>
+        <Translation Language="FR">Selection de la langue</Translation>
+        <Translation Language="TN">إختيار اللغة</Translation>
+      </Text>
+      <Text Id="language2" Alignment="Left" TypographyId="small_C">
+        <Translation Language="GB">Français</Translation>
+        <Translation Language="KR">Français</Translation>
+        <Translation Language="CN">Français</Translation>
+        <Translation Language="JP">Français</Translation>
+        <Translation Language="DK">Français</Translation>
+        <Translation Language="FR">Français</Translation>
+        <Translation Language="TN">Français</Translation>
+      </Text>
+      <Text Id="language3" Alignment="Left" TypographyId="koreanTiny">
+        <Translation Language="GB">한국어</Translation>
+        <Translation Language="KR">한국어</Translation>
+        <Translation Language="CN">한국어</Translation>
+        <Translation Language="JP">한국어</Translation>
+        <Translation Language="DK">한국어</Translation>
+        <Translation Language="FR">한국어</Translation>
+        <Translation Language="TN">한국어</Translation>
+      </Text>
+      <Text Id="language4" Alignment="Left" TypographyId="JP_CN_tiny">
+        <Translation Language="GB">中文</Translation>
+        <Translation Language="KR">中文</Translation>
+        <Translation Language="CN">中文</Translation>
+        <Translation Language="JP">中文</Translation>
+        <Translation Language="DK">中文</Translation>
+        <Translation Language="FR">中文</Translation>
+        <Translation Language="TN">中文</Translation>
+      </Text>
+      <Text Id="language5" Alignment="Left" TypographyId="small_C">
+        <Translation Language="GB">English</Translation>
+        <Translation Language="KR">English</Translation>
+        <Translation Language="CN">English</Translation>
+        <Translation Language="JP">English</Translation>
+        <Translation Language="DK">English</Translation>
+        <Translation Language="FR">English</Translation>
+        <Translation Language="TN">English</Translation>
+      </Text>
+      <Text Id="language6" Alignment="Left" TypographyId="JP_CN_tiny">
+        <Translation Language="GB">日本語</Translation>
+        <Translation Language="KR">日本語</Translation>
+        <Translation Language="CN">日本語</Translation>
+        <Translation Language="JP">日本語</Translation>
+        <Translation Language="DK">日本語</Translation>
+        <Translation Language="FR">日本語</Translation>
+        <Translation Language="TN">日本語</Translation>
+      </Text>
+      <Text Id="language7" Alignment="Left" TypographyId="arabicTiny">
+        <Translation Language="GB">العربية</Translation>
+        <Translation Language="KR">العربية</Translation>
+        <Translation Language="CN">العربية</Translation>
+        <Translation Language="JP">العربية</Translation>
+        <Translation Language="DK">العربية</Translation>
+        <Translation Language="FR">العربية</Translation>
+        <Translation Language="TN">العربية</Translation>
+      </Text>
+      <Text Id="SingleUseId1" Alignment="Right" TypographyId="tiny">
+        <Translation Language="GB">&lt;&gt;</Translation>
+        <Translation Language="KR">&lt;&gt;</Translation>
+        <Translation Language="CN">&lt;&gt;</Translation>
+        <Translation Language="JP">&lt;&gt;</Translation>
+        <Translation Language="DK">&lt;&gt;</Translation>
+        <Translation Language="FR">&lt;&gt;</Translation>
+        <Translation Language="TN">&lt;&gt;</Translation>
+      </Text>
+      <Text Id="SingleUseId3" Alignment="Left" TypographyId="tiny">
+        <Translation Language="GB">&lt;&gt;</Translation>
+        <Translation Language="KR">&lt;&gt;</Translation>
+        <Translation Language="CN">&lt;&gt;</Translation>
+        <Translation Language="JP">&lt;&gt;</Translation>
+        <Translation Language="DK">&lt;&gt;</Translation>
+        <Translation Language="FR">&lt;&gt;</Translation>
+        <Translation Language="TN">&lt;&gt;</Translation>
+      </Text>
+      <Text Id="LanguagesMenuItem" Alignment="Center" TypographyId="small_B">
+        <Translation Language="GB">Language</Translation>
+        <Translation Language="KR">언어</Translation>
+        <Translation Language="CN">語</Translation>
+        <Translation Language="JP">言語</Translation>
+        <Translation Language="DK">Sprog</Translation>
+        <Translation Language="FR">Langue</Translation>
+        <Translation Language="TN">اللغة</Translation>
+      </Text>
+      <Text Id="InformationMenuItem" Alignment="Center" TypographyId="small_B">
+        <Translation Language="GB">Information</Translation>
+        <Translation Language="KR">정보</Translation>
+        <Translation Language="CN">信息</Translation>
+        <Translation Language="JP">情報</Translation>
+        <Translation Language="DK">Information</Translation>
+        <Translation Language="FR">Informations</Translation>
+        <Translation Language="TN">معلومات</Translation>
+      </Text>
+      <Text Id="PicturesMenuItem" Alignment="Center" TypographyId="small_B">
+        <Translation Language="GB">Pictures</Translation>
+        <Translation Language="KR">그림</Translation>
+        <Translation Language="CN">圖片</Translation>
+        <Translation Language="JP">写真</Translation>
+        <Translation Language="DK">Billede</Translation>
+        <Translation Language="FR">Image</Translation>
+        <Translation Language="TN">الصور</Translation>
+      </Text>
+      <Text Id="GraphMenuItem" Alignment="Center" TypographyId="small_B">
+        <Translation Language="GB">Graph</Translation>
+        <Translation Language="KR">그래프</Translation>
+        <Translation Language="CN">圖形</Translation>
+        <Translation Language="JP">グラフ</Translation>
+        <Translation Language="DK">Kurve</Translation>
+        <Translation Language="FR">Graphique</Translation>
+        <Translation Language="TN">رسم بياني</Translation>
+      </Text>
+    </TextGroup>
+  </Texts>
+  <Typographies>
+    <Typography Id="small_C" Font="timesbi.ttf" Size="13" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?">
+      <LanguageSetting Language="KR" Font="NanumGothic.ttf" Size="13" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+      <LanguageSetting Language="CN" Font="chinese.msyh.ttf" Size="13" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+      <LanguageSetting Language="JP" Font="chinese.msyh.ttf" Size="13" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+      <LanguageSetting Language="TN" Font="Amiri-Regular.ttf" Size="13" Bpp="4" IsVector="no" Direction="RTL" FallbackCharacter="?" />
+    </Typography>
+    <Typography Id="tiny" Font="timesbi.ttf" Size="13" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" WidgetWildcardCharacters="-., 0123456789" />
+    <Typography Id="small_B" Font="timesbi.ttf" Size="20" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?">
+      <LanguageSetting Language="KR" Font="NanumGothic.ttf" Size="20" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+      <LanguageSetting Language="CN" Font="chinese.msyh.ttf" Size="20" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+      <LanguageSetting Language="JP" Font="chinese.msyh.ttf" Size="20" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+      <LanguageSetting Language="TN" Font="Amiri-Regular.ttf" Size="18" Bpp="2" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+    </Typography>
+    <Typography Id="koreanTiny" Font="NanumGothic.ttf" Size="13" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+    <Typography Id="JP_CN_tiny" Font="chinese.msyh.ttf" Size="13" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+    <Typography Id="arabicTiny" Font="Amiri-Regular.ttf" Size="16" Bpp="4" IsVector="no" Direction="RTL" FallbackCharacter="?" />
+  </Typographies>
+</TextDatabase>

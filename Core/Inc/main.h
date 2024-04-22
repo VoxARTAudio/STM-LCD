@@ -115,8 +115,6 @@ void Error_Handler(void);
 #define DCMI_D6_GPIO_Port GPIOI
 #define DCMI_VSYNC_Pin GPIO_PIN_5
 #define DCMI_VSYNC_GPIO_Port GPIOI
-#define I2S_SD_Pin GPIO_PIN_3
-#define I2S_SD_GPIO_Port GPIOI
 #define IO_Expander_INT_Pin GPIO_PIN_2
 #define IO_Expander_INT_GPIO_Port GPIOI
 #define USB_FS_DM_Pin GPIO_PIN_11
@@ -207,10 +205,8 @@ void Error_Handler(void);
 #define ULPI_STP_GPIO_Port GPIOC
 #define MII_MDC_Pin GPIO_PIN_1
 #define MII_MDC_GPIO_Port GPIOC
-#define MII_TXD2_Pin GPIO_PIN_2
-#define MII_TXD2_GPIO_Port GPIOC
-#define MII_TX_CLK_Pin GPIO_PIN_3
-#define MII_TX_CLK_GPIO_Port GPIOC
+#define I2S_SD_Pin GPIO_PIN_3
+#define I2S_SD_GPIO_Port GPIOC
 #define SW1_Pin GPIO_PIN_2
 #define SW1_GPIO_Port GPIOB
 #define A11_Pin GPIO_PIN_1

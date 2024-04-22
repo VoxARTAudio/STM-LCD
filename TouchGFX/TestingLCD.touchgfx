@@ -1,0 +1,740 @@
+{
+  "Application": {
+    "Screens": [
+      {
+        "Name": "Screen1",
+        "Components": [
+          {
+            "Type": "Box",
+            "Name": "background",
+            "Width": 320,
+            "Height": 240,
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            }
+          },
+          {
+            "Type": "Container",
+            "Name": "logoTextContainer",
+            "X": 140,
+            "Y": 68,
+            "Width": 40,
+            "Height": 119,
+            "Components": [
+              {
+                "Type": "Image",
+                "Name": "logoText",
+                "Width": 240,
+                "Height": 52,
+                "RelativeFilename": "logo_00.png"
+              }
+            ]
+          },
+          {
+            "Type": "Image",
+            "Name": "logoX",
+            "X": 140,
+            "Y": 68,
+            "Width": 40,
+            "Height": 52,
+            "RelativeFilename": "logo_01.png"
+          },
+          {
+            "Type": "Box",
+            "Name": "seperatorLine",
+            "X": -258,
+            "Y": 185,
+            "Width": 258,
+            "Height": 2,
+            "Color": {
+              "Red": 21,
+              "Green": 142,
+              "Blue": 181
+            }
+          },
+          {
+            "Type": "Image",
+            "Name": "menuIcon0",
+            "X": 123,
+            "Y": 73,
+            "Width": 74,
+            "Height": 74,
+            "RelativeFilename": "subDemoIcon_Info.png",
+            "Alpha": 0
+          },
+          {
+            "Type": "Button",
+            "Name": "menuLeftArrow",
+            "Y": 80,
+            "Width": 50,
+            "Height": 60,
+            "Pressed": "leftArrowDark.png",
+            "Released": "leftArrow.png",
+            "Alpha": 0
+          },
+          {
+            "Type": "Button",
+            "Name": "menuRightArrow",
+            "X": 270,
+            "Y": 80,
+            "Width": 50,
+            "Height": 60,
+            "Pressed": "rightArrowDark.png",
+            "Released": "rightArrow.png",
+            "Alpha": 0
+          },
+          {
+            "Type": "Button",
+            "Name": "menuHiddenButton",
+            "X": 123,
+            "Y": 57,
+            "Width": 74,
+            "Height": 74,
+            "Pressed": "menuHiddenButton.png",
+            "Released": "menuHiddenButton.png"
+          },
+          {
+            "Type": "TextArea",
+            "Name": "headline",
+            "Y": 4,
+            "Width": 320,
+            "Height": 38,
+            "TextId": "InformationMenuItem",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 20,
+              "Green": 22,
+              "Blue": 23
+            },
+            "Alpha": 0
+          },
+          {
+            "Type": "Box",
+            "Name": "headlineSeperatorLine",
+            "Y": 38,
+            "Width": 320,
+            "Height": 2,
+            "Color": {
+              "Red": 21,
+              "Green": 142,
+              "Blue": 181
+            },
+            "Alpha": 0
+          },
+          {
+            "Type": "Image",
+            "Name": "subtitle",
+            "X": 60,
+            "Y": 147,
+            "Width": 200,
+            "Height": 22,
+            "RelativeFilename": "TocuhGFXDemo5.png",
+            "Alpha": 0
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "SwitchScreenToInfoScreen",
+            "Trigger": {
+              "Type": "TriggerWhen",
+              "ActionCustomTypeName": "Call Screen1 goToInfoScreen"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionNone",
+              "ActionComponent": "Info"
+            }
+          },
+          {
+            "InteractionName": "SwitchScreenToImageScreen",
+            "Trigger": {
+              "Type": "TriggerWhen",
+              "ActionCustomTypeName": "Call Screen1 goToImageScreen"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionNone",
+              "ActionComponent": "Image"
+            }
+          },
+          {
+            "InteractionName": "SwitchScreenToListScreen",
+            "Trigger": {
+              "Type": "TriggerWhen",
+              "ActionCustomTypeName": "Call Screen1 goToListScreen"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionNone",
+              "ActionComponent": "List"
+            }
+          },
+          {
+            "InteractionName": "SwitchScreenToGraphScreen",
+            "Trigger": {
+              "Type": "TriggerWhen",
+              "ActionCustomTypeName": "Call Screen1 goToGraphScreen"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionWipe",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "Graph"
+            }
+          },
+          {
+            "InteractionName": "MoveMenuItemToRight",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "menuRightArrow"
+            },
+            "Action": {
+              "Type": "ActionCustom",
+              "FunctionName": "menuRightButtonClicked"
+            }
+          },
+          {
+            "InteractionName": "MoveMenuItemToLeft",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "menuLeftArrow"
+            },
+            "Action": {
+              "Type": "ActionCustom",
+              "FunctionName": "menuLeftButtonClicked"
+            }
+          },
+          {
+            "InteractionName": "MenuItemIsSelected",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "menuHiddenButton"
+            },
+            "Action": {
+              "Type": "ActionCustom",
+              "FunctionName": "menuHiddenButtonClicked"
+            }
+          }
+        ],
+        "CustomActions": [
+          {
+            "Name": "goToInfoScreen",
+            "Description": "Called from user code to change screen"
+          },
+          {
+            "Name": "goToImageScreen",
+            "Description": "Called from user code to change screen"
+          },
+          {
+            "Name": "goToListScreen",
+            "Description": "Called from user code to change screen"
+          },
+          {
+            "Name": "goToGraphScreen",
+            "Description": "Called from user code to change screen"
+          }
+        ]
+      },
+      {
+        "Name": "Info",
+        "Components": [
+          {
+            "Type": "Image",
+            "Name": "imgBackground",
+            "Width": 320,
+            "Height": 240,
+            "RelativeFilename": "infoBackground.png"
+          },
+          {
+            "Type": "Button",
+            "Name": "returnButton",
+            "Width": 50,
+            "Height": 50,
+            "Pressed": "returnIcon.png",
+            "Released": "returnIcon.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "info",
+            "Y": 67,
+            "Width": 320,
+            "Height": 138,
+            "RelativeFilename": "info.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "headline",
+            "X": 102,
+            "Y": 13,
+            "Width": 116,
+            "Height": 25,
+            "RelativeFilename": "UIDemo5.png"
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "SwitchScreenToScreen1",
+            "Trigger": {
+              "Type": "TriggerWhen",
+              "ActionCustomTypeName": "Call Info goToScreen1"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionNone",
+              "ActionComponent": "Screen1"
+            }
+          },
+          {
+            "InteractionName": "SwitchScreenToScreen1Button",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "returnButton"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionNone",
+              "ActionComponent": "Screen1"
+            }
+          }
+        ],
+        "CustomActions": [
+          {
+            "Name": "goToScreen1",
+            "Description": "Called from user code to change screen"
+          }
+        ]
+      },
+      {
+        "Name": "Image",
+        "Components": [
+          {
+            "Type": "Image",
+            "Name": "image",
+            "Width": 320,
+            "Height": 240,
+            "RelativeFilename": "image0.png",
+            "Moveable": true
+          },
+          {
+            "Type": "Image",
+            "Name": "joystickOverlay",
+            "X": 46,
+            "Y": 57,
+            "Width": 229,
+            "Height": 126,
+            "RelativeFilename": "joystick_overlay.png",
+            "Fadeable": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "joystickText",
+            "X": 123,
+            "Y": 58,
+            "Width": 152,
+            "Height": 110,
+            "TextId": "joystickNote",
+            "TextRotation": "0",
+            "Fadeable": true
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "SwitchScreenToScreen1",
+            "Trigger": {
+              "Type": "TriggerWhen",
+              "ActionCustomTypeName": "Call Image goToScreen1"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionNone",
+              "ActionComponent": "Screen1"
+            }
+          }
+        ],
+        "CustomActions": [
+          {
+            "Name": "goToScreen1",
+            "Description": "Called from user code to change screen"
+          }
+        ]
+      },
+      {
+        "Name": "List",
+        "Components": [
+          {
+            "Type": "Image",
+            "Name": "image1",
+            "Width": 320,
+            "Height": 240,
+            "RelativeFilename": "listBackground.png"
+          },
+          {
+            "Type": "ScrollWheel",
+            "Name": "languageSelectorWheel",
+            "X": 60,
+            "Y": 86,
+            "Width": 200,
+            "Height": 118,
+            "SelectedItemOffset": 40,
+            "UseSelectedStyle": true,
+            "SelectedItemTemplateName": "languageSelectorElementCenter",
+            "IsCircular": true,
+            "ItemTemplateName": "languageSelectorElement",
+            "NumberofItems": 7,
+            "Easing": "Back",
+            "EasingOption": "Out",
+            "SwipeAcceleration": 1.0,
+            "DragAcceleration": 1.0
+          },
+          {
+            "Type": "TextArea",
+            "Name": "headline",
+            "X": 50,
+            "Y": 13,
+            "Width": 220,
+            "Height": 29,
+            "TextId": "languageHeadline",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 16,
+              "Green": 141,
+              "Blue": 171
+            }
+          },
+          {
+            "Type": "Button",
+            "Name": "returnButton",
+            "Width": 50,
+            "Height": 50,
+            "Pressed": "returnIcon.png",
+            "Released": "returnIcon.png"
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "SwitchScreenToScreen1",
+            "Trigger": {
+              "Type": "TriggerWhen",
+              "ActionCustomTypeName": "Call List goToScreen1"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionNone",
+              "ActionComponent": "Screen1"
+            }
+          },
+          {
+            "InteractionName": "BackToMainScreen",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "returnButton"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionNone",
+              "ActionComponent": "Screen1"
+            }
+          }
+        ],
+        "CustomActions": [
+          {
+            "Name": "goToScreen1",
+            "Description": "Called from user code to change screen"
+          }
+        ]
+      },
+      {
+        "Name": "Graph",
+        "CanvasBufferSize": 4800,
+        "Components": [
+          {
+            "Type": "Box",
+            "Name": "background",
+            "Width": 320,
+            "Height": 240,
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            }
+          },
+          {
+            "Type": "BoxWithBorder",
+            "Name": "graphFrame",
+            "X": 5,
+            "Y": 5,
+            "Width": 310,
+            "Height": 230,
+            "Color": {
+              "Red": 245,
+              "Green": 250,
+              "Blue": 252
+            },
+            "BorderSize": 1
+          },
+          {
+            "Type": "DynamicGraph",
+            "Name": "dynamicGraph1",
+            "X": 11,
+            "Y": 12,
+            "Width": 300,
+            "Height": 217,
+            "DataSeed": 338699146,
+            "NumberOfValues": 100,
+            "MaxY": 100.0,
+            "MinY": -1.0,
+            "Precision": "1",
+            "UseCustomVisibleDataPointRange": true,
+            "LastIndex": 100,
+            "XAxisScale": 1.0,
+            "LabelSizeTop": 30,
+            "LabelSizeBottom": 22,
+            "LabelSizeLeft": 29,
+            "LabelSizeRight": 23,
+            "PaddingTop": 8,
+            "PaddingBottom": 4,
+            "PaddingLeft": 8,
+            "PaddingRight": 2,
+            "GraphType": "GraphWrapClear",
+            "GraphDrawers": [
+              {
+                "Type": "AreaDrawer",
+                "FileNameImage": "",
+                "Color": {
+                  "Red": 20,
+                  "Green": 151,
+                  "Blue": 197
+                }
+              },
+              {
+                "Type": "LineDrawer",
+                "LineWidth": 2,
+                "FileNameImage": ""
+              }
+            ],
+            "YAxisGrid": {
+              "Type": "GraphGrid",
+              "Color": {
+                "Red": 20,
+                "Green": 151,
+                "Blue": 197
+              },
+              "Interval": 25.0,
+              "LineWidth": 1
+            },
+            "XAxisLabel": {
+              "Type": "GraphLabel",
+              "Interval": 20.0,
+              "DecimalSeparator": "Point",
+              "TextId": "SingleUseId3",
+              "TextRotation": "0",
+              "Position": "Bottom"
+            },
+            "YAxisLabel": {
+              "Type": "GraphLabel",
+              "Interval": 25.0,
+              "DecimalSeparator": "Point",
+              "TextId": "SingleUseId1",
+              "TextRotation": "0",
+              "Position": "Left"
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "label",
+            "X": 102,
+            "Y": 9,
+            "Width": 116,
+            "Height": 28,
+            "TextId": "GraphMenuItem",
+            "TextRotation": "0"
+          },
+          {
+            "Type": "Button",
+            "Name": "hiddenButton",
+            "X": 5,
+            "Y": 5,
+            "Width": 310,
+            "Height": 230,
+            "Pressed": "graphHiddenButton.png",
+            "Released": "graphHiddenButton.png"
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "SwitchScreenToScreen1",
+            "Trigger": {
+              "Type": "TriggerWhen",
+              "ActionCustomTypeName": "Call Graph goToScreen1"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionNone",
+              "ActionComponent": "Screen1"
+            }
+          },
+          {
+            "InteractionName": "SwitchScreenToScreen1_Button",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "hiddenButton"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionNone",
+              "ActionComponent": "Screen1"
+            }
+          }
+        ],
+        "CustomActions": [
+          {
+            "Name": "goToScreen1",
+            "Description": "Called from user code to change screen"
+          }
+        ]
+      }
+    ],
+    "CustomContainerDefinitions": [
+      {
+        "Name": "languageSelectorElement",
+        "Width": 200,
+        "Height": 40,
+        "Components": [
+          {
+            "Type": "Box",
+            "Name": "background",
+            "Width": 200,
+            "Height": 40,
+            "Color": {
+              "Red": 232,
+              "Green": 243,
+              "Blue": 255
+            }
+          },
+          {
+            "Type": "Image",
+            "Name": "flagImage",
+            "X": 13,
+            "Y": 9,
+            "Width": 32,
+            "Height": 24,
+            "RelativeFilename": "flags\\denmark-flag-small.png"
+          },
+          {
+            "Type": "TextArea",
+            "Name": "languageText",
+            "X": 52,
+            "Y": 7,
+            "Width": 135,
+            "Height": 28,
+            "TextId": "language0",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 16,
+              "Green": 141,
+              "Blue": 171
+            }
+          }
+        ],
+        "Interactions": []
+      },
+      {
+        "Name": "languageSelectorElementCenter",
+        "Width": 200,
+        "Height": 40,
+        "Components": [
+          {
+            "Type": "Box",
+            "Name": "background",
+            "Width": 200,
+            "Height": 40,
+            "Color": {
+              "Red": 158,
+              "Green": 180,
+              "Blue": 203
+            }
+          },
+          {
+            "Type": "Image",
+            "Name": "flagImage",
+            "X": 13,
+            "Y": 9,
+            "Width": 32,
+            "Height": 24,
+            "RelativeFilename": "flags\\denmark-flag-small.png"
+          },
+          {
+            "Type": "TextArea",
+            "Name": "languageText",
+            "X": 52,
+            "Y": 7,
+            "Width": 135,
+            "Height": 28,
+            "TextId": "language0",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 44,
+              "Green": 69,
+              "Blue": 75
+            }
+          }
+        ],
+        "Interactions": []
+      }
+    ],
+    "Name": "MyApplication",
+    "Resolution": {
+      "Width": 320,
+      "Height": 240
+    },
+    "SelectedColorDepth": 16,
+    "StartupScreenName": "Screen1",
+    "SelectedStartupLanguage": "GB",
+    "TouchGfxPath": "../Middlewares/ST/touchgfx",
+    "UIPath": ".",
+    "AvailableColorDepths": [
+      16
+    ],
+    "AvailableLCDs": {
+      "16": "LCD16bpp"
+    },
+    "AvailableSections": [
+      "ExtFlashSection",
+      "IntFlashSection"
+    ],
+    "AvailableResolutions": [
+      {
+        "Width": 320,
+        "Height": 240
+      }
+    ],
+    "PhysicalButtons": [],
+    "FrameworkFeatures": {
+      "LCD16bpp": {
+        "Id": "LCD16bpp",
+        "IsEnabled": true
+      }
+    },
+    "GenerateAssetsCommand": "make -f simulator/gcc/Makefile assets -j8",
+    "PostGenerateCommand": "touchgfx update_project --project-file=simulator/msvs/Application.vcxproj",
+    "PostGenerateTargetCommand": "touchgfx update_project",
+    "CompileSimulatorCommand": "make -f simulator/gcc/Makefile -j8",
+    "RunSimulatorCommand": "build\\bin\\simulator.exe",
+    "LandscapeSkinX": 0,
+    "LandscapeSkinY": 0,
+    "PortraitSkinX": 0,
+    "PortraitSkinY": 0,
+    "DisplayOrientation": "Landscape",
+    "Family": "STM32F4",
+    "SubFamily": "STM32F407/417",
+    "Toolchain": "MDK-ARM V5.32",
+    "Platform": "m4",
+    "ProjectFile": "../TestingLCD.ioc",
+    "OptionalComponentsRoot": "../Middlewares/ST/touchgfx_components",
+    "OptionalComponents": [],
+    "AdditionalFeatures": []
+  },
+  "Version": "4.23.2"
+}

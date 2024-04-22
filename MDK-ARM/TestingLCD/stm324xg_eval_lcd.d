@@ -27,6 +27,7 @@ testinglcd\stm324xg_eval_lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ha
 testinglcd\stm324xg_eval_lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h
 testinglcd\stm324xg_eval_lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h
 testinglcd\stm324xg_eval_lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h
+testinglcd\stm324xg_eval_lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h
 testinglcd\stm324xg_eval_lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dac.h
 testinglcd\stm324xg_eval_lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dac_ex.h
 testinglcd\stm324xg_eval_lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
@@ -43,13 +44,11 @@ testinglcd\stm324xg_eval_lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ha
 testinglcd\stm324xg_eval_lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 testinglcd\stm324xg_eval_lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 testinglcd\stm324xg_eval_lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-testinglcd\stm324xg_eval_lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h
-testinglcd\stm324xg_eval_lcd.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 testinglcd\stm324xg_eval_lcd.o: ..\Drivers\BSP\STM324xG_EVAL\../Components/ili9325/ili9325.h
 testinglcd\stm324xg_eval_lcd.o: ..\Drivers\BSP\STM324xG_EVAL\../Components/ili9325/../Common/lcd.h
-testinglcd\stm324xg_eval_lcd.o: ..\Drivers\BSP\STM324xG_EVAL\../../../Utilities/Fonts/fonts.h
-testinglcd\stm324xg_eval_lcd.o: ..\Drivers\BSP\STM324xG_EVAL\../../../Utilities/Fonts/font24.c
-testinglcd\stm324xg_eval_lcd.o: ..\Drivers\BSP\STM324xG_EVAL\../../../Utilities/Fonts/font20.c
-testinglcd\stm324xg_eval_lcd.o: ..\Drivers\BSP\STM324xG_EVAL\../../../Utilities/Fonts/font16.c
-testinglcd\stm324xg_eval_lcd.o: ..\Drivers\BSP\STM324xG_EVAL\../../../Utilities/Fonts/font12.c
-testinglcd\stm324xg_eval_lcd.o: ..\Drivers\BSP\STM324xG_EVAL\../../../Utilities/Fonts/font8.c
+testinglcd\stm324xg_eval_lcd.o: ../Core/Inc/../../../Utilities/Fonts/fonts.h
+testinglcd\stm324xg_eval_lcd.o: ../Core/Inc/../../../Utilities/Fonts/font24.c
+testinglcd\stm324xg_eval_lcd.o: ../Core/Inc/../../../Utilities/Fonts/font20.c
+testinglcd\stm324xg_eval_lcd.o: ../Core/Inc/../../../Utilities/Fonts/font16.c
+testinglcd\stm324xg_eval_lcd.o: ../Core/Inc/../../../Utilities/Fonts/font12.c
+testinglcd\stm324xg_eval_lcd.o: ../Core/Inc/../../../Utilities/Fonts/font8.c
