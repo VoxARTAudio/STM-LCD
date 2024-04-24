@@ -26,7 +26,6 @@ testinglcd\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h
 testinglcd\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h
 testinglcd\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h
 testinglcd\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h
-testinglcd\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h
 testinglcd\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dac.h
 testinglcd\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dac_ex.h
 testinglcd\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
@@ -43,7 +42,6 @@ testinglcd\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 testinglcd\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 testinglcd\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 testinglcd\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-testinglcd\main.o: ../TouchGFX/App/app_touchgfx.h
 testinglcd\main.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdio.h
 testinglcd\main.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdlib.h
 testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/stm324xg_eval_lcd.h
@@ -55,10 +53,6 @@ testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/stm324xg_eval_io.h
 testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/../Components/stmpe811/stmpe811.h
 testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/../Components/stmpe811/../Common/ts.h
 testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/../Components/stmpe811/../Common/io.h
-testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/stm324xg_eval_audio.h
-testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/../Components/cs43l22/cs43l22.h
-testinglcd\main.o: ../Drivers/BSP/STM324xG_EVAL/../Components/cs43l22/../Common/audio.h
-testinglcd\main.o: ../Core/Inc/audio_if.h
 testinglcd\main.o: ../Core/Inc/mpu6050.h
 testinglcd\main.o: ../Core/Inc/i2c.h
 testinglcd\main.o: ../Core/Inc/voxart_dev.h

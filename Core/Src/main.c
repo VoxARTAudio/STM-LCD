@@ -18,7 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "app_touchgfx.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -29,11 +28,7 @@
 //BSP & HAL
 #include "stm324xg_eval_lcd.h"
 #include "stm324xg_eval_io.h"
-#include "stm324xg_eval_audio.h"
 #include "stm32f4xx_hal_uart.h"
-
-//AUDIO
-#include "audio_if.h"
 
 //IMU
 #include "mpu6050.h"
@@ -50,23 +45,18 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define INT16_TO_FLOAT 1.0f / (32768.0f)
+#define FLOAT_TO_INT16 32768.0f
+#define BUFFER_SIZE 8
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-__IO uint32_t uwCommand = AUDIO_PAUSE;
-__IO uint32_t uwVolume = AUDIO_DEFAULT_VOLUME;
-
-/* Variable to indicate that push buttons will be used for switching between 
-   Headphone and Speaker output modes. */
-uint32_t uwSpHpSwitch = 0;
 
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc3;
-
-CRC_HandleTypeDef hcrc;
 
 DAC_HandleTypeDef hdac;
 DMA_HandleTypeDef hdma_dac1;
@@ -74,6 +64,7 @@ DMA_HandleTypeDef hdma_dac1;
 I2C_HandleTypeDef hi2c1;
 
 I2S_HandleTypeDef hi2s2;
+DMA_HandleTypeDef hdma_i2s2_ext_rx;
 DMA_HandleTypeDef hdma_spi2_tx;
 
 TIM_HandleTypeDef htim7;
@@ -88,6 +79,19 @@ SRAM_HandleTypeDef hsram1;
 MPU6050_t MPU6050;
 circle c = {50, 150, 120};
 imuMovement imu = {0, 0, 0, NO};
+
+int16_t adcData[BUFFER_SIZE];
+int16_t dacData[BUFFER_SIZE];
+
+static volatile int16_t *inBuff;
+static volatile int16_t *outBuff = &dacData[0];
+
+uint16_t rxBuf[8];
+uint16_t txBuf[8];
+
+uint8_t dataReady;
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -103,13 +107,134 @@ static void MX_TIM11_Init(void);
 static void MX_I2S2_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_DAC_Init(void);
-static void MX_CRC_Init(void);
 /* USER CODE BEGIN PFP */
+float l_a0, l_a1, l_a2, l_b1, l_b2, lin_z1, lin_z2, lout_z1, lout_z2;
+float r_a0, r_a1, r_a2, r_b1, r_b2, rin_z1, rin_z2, rout_z1, rout_z2;
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-AUDIO_ErrorTypeDef startAud;
+int Calc_IIR_Left (int inSample) {
+	float inSampleF = (float)inSample;
+	float outSampleF =
+			l_a0 * inSampleF
+			+ l_a1 * lin_z1
+			+ l_a2 * lin_z2
+			- l_b1 * lout_z1
+			- l_b2 * lout_z2;
+	lin_z2 = lin_z1;
+	lin_z1 = inSampleF;
+	lout_z2 = lout_z1;
+	lout_z1 = outSampleF;
+
+	return (int) outSampleF;
+}
+
+int Calc_IIR_Right (int inSample) {
+	float inSampleF = (float)inSample;
+	float outSampleF =
+			r_a0 * inSampleF
+			+ r_a1 * rin_z1
+			+ r_a2 * rin_z2
+			- r_b1 * rout_z1
+			- r_b2 * rout_z2;
+	rin_z2 = rin_z1;
+	rin_z1 = inSampleF;
+	rout_z2 = rout_z1;
+	rout_z1 = outSampleF;
+
+	return (int) outSampleF;
+}
+		 
+void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s) {
+//	inBuff = &adcData[0];
+//	outBuff = &dacData[0];
+//	
+//	dataReady = 1;
+	//restore signed 24 bit sample from 16-bit buffers
+	int lSample = (int) (rxBuf[0]<<16)|rxBuf[1];
+	int rSample = (int) (rxBuf[2]<<16)|rxBuf[3];
+
+	// divide by 2 (rightshift) -> -3dB per sample
+	lSample = lSample>>1;
+	rSample = rSample>>1;
+
+	//sum to mono
+	lSample = rSample + lSample;
+	rSample = lSample;
+
+	//run HP on left channel and LP on right channel
+	lSample = Calc_IIR_Left(lSample);
+	rSample = Calc_IIR_Right(rSample);
+
+	//restore to buffer
+	txBuf[0] = (lSample>>16)&0xFFFF;
+	txBuf[1] = lSample&0xFFFF;
+	txBuf[2] = (rSample>>16)&0xFFFF;
+	txBuf[3] = rSample&0xFFFF;
+}
+
+void HAL_I2SEx_TxRxCpltCallback(I2S_HandleTypeDef *hi2s) {
+//	inBuff = &adcData[BUFFER_SIZE/2];
+//	outBuff = &dacData[BUFFER_SIZE/2];
+//	
+//	dataReady = 1;
+	//restore signed 24 bit sample from 16-bit buffers
+	int lSample = (int) (rxBuf[4]<<16)|rxBuf[5];
+	int rSample = (int) (rxBuf[6]<<16)|rxBuf[7];
+
+	// divide by 2 (rightshift) -> -3dB per sample
+	lSample = lSample>>1;
+	rSample = rSample>>1;
+
+	//sum to mono
+	lSample = rSample + lSample;
+	rSample = lSample;
+
+	//run HP on left channel and LP on right channel
+	lSample = Calc_IIR_Left(lSample);
+	rSample = Calc_IIR_Right(rSample);
+
+	//restore to buffer
+	txBuf[4] = (lSample>>16)&0xFFFF;
+	txBuf[5] = lSample&0xFFFF;
+	txBuf[6] = (rSample>>16)&0xFFFF;
+	txBuf[7] = rSample&0xFFFF;
+}
+
+void dsp() {
+	static float leftIn, leftOut, rightIn, rightOut;
+	
+	for(uint8_t n = 0; n < (BUFFER_SIZE/2) - 1; n+= 2) {
+		/* Left */
+		leftIn = INT16_TO_FLOAT*inBuff[n];
+		if(leftIn > 1.0f) {
+			leftIn -= 2.0f;
+		}
+		
+		/* DSP left channel */
+		leftOut = leftIn;
+		
+		/* TO DMA */
+		outBuff[n] = (int16_t)(FLOAT_TO_INT16 * leftOut);
+		
+		/* Right */
+		rightIn = INT16_TO_FLOAT * inBuff[n+1];
+		if(rightIn > 1.0f) {
+			rightIn -= 2.0f;
+		}
+		
+		/* DSP right channel */
+		rightOut = rightIn;
+		
+		/* TO DMA */
+		outBuff[n+1] = (int16_t)(FLOAT_TO_INT16 * rightOut);
+	}
+	dataReady = 0;
+}
+
+
+
 /* USER CODE END 0 */
 
 /**
@@ -120,6 +245,19 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+	//left-channel, High-Pass, 1kHz, fs=96kHz, q=0.7
+  l_a0 = 0.9543457485325094f;
+  l_a1 = -1.9086914970650188f;
+  l_a2 = 0.9543457485325094f;
+  l_b1 = -1.9066459797557103f;
+  l_b2 = 0.9107370143743273f;
+
+  //right-channel, Low-Pass, 1kHz, fs)96 kHz, q=0.7
+  r_a0 = 0.0010227586546542474f;
+  r_a1 = 0.002045517309308495f;
+  r_a2 = 0.0010227586546542474f;
+  r_b1 = -1.9066459797557103f;
+  r_b2 = 0.9107370143743273f;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -136,13 +274,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-//	while(BSP_AUDIO_OUT_Init(OUTPUT_DEVICE_BOTH, 50, 48000) == AUDIO_ERROR) {
-//		HAL_GPIO_TogglePin(LED1_GPIO_PORT, LED1_PIN);
-//		serialPrintln("[Audio] OUTPUT ERROR. RESTART SYSTEM");
-//		HAL_Delay(1000);
-//		BSP_LCD_DisplayStringAt(5, 75, (uint8_t *)"AUDIO ERROR :(", CENTER_MODE); 
-//	}
-
+	
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -157,9 +289,8 @@ int main(void)
   MX_I2S2_Init();
   MX_I2C1_Init();
   MX_DAC_Init();
-  MX_CRC_Init();
-  MX_TouchGFX_Init();
   /* USER CODE BEGIN 2 */
+
 	
 	BSP_LCD_DisplayOn();
 	HAL_Delay(50);
@@ -175,13 +306,23 @@ int main(void)
 	
 	serialPrintln("[LCD] READY");
 	
-	if(MPU6050_Init(&hi2c1) == 1) {
+//	HAL_StatusTypeDef audioInOutStatus = HAL_I2SEx_TransmitReceive_DMA(&hi2s2, (uint16_t*)dacData, (uint16_t*)adcData, BUFFER_SIZE);
+    HAL_StatusTypeDef audioInOutStatus = HAL_I2SEx_TransmitReceive_DMA (&hi2s2, txBuf, rxBuf, 4);
+	if(audioInOutStatus != HAL_OK) {
 		BSP_LCD_SetTextColor(LCD_COLOR_RED);
-		BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"   Power Cycle :(   "); 
+    BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"   Audio ERR   "); 
 		HAL_GPIO_TogglePin(LED4_GPIO_PORT, LED4_PIN);
-		serialPrintln("[MPU6050] MPU ERROR. RESTART SYSTEM");
 		while(1) {}
-	};
+	}
+
+	
+//	if(MPU6050_Init(&hi2c1) == 1) {
+//		BSP_LCD_SetTextColor(LCD_COLOR_RED);
+//		BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"   Power Cycle :(   "); 
+//		HAL_GPIO_TogglePin(LED4_GPIO_PORT, LED4_PIN);
+//		serialPrintln("[MPU6050] MPU ERROR. RESTART SYSTEM");
+//		while(1) {}
+//	};
 	
 	if(HAL_TIM_Base_Start_IT(&htim7) == HAL_OK) {
 		serialPrintln("[Timer] TIM7 ENABLED");
@@ -200,17 +341,17 @@ int main(void)
 	
 	serialPrintln("Allen was here");
 	
-//	startAud = AUDIO_Start();
-	
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
 	{
+//		if(dataReady) {
+//			dsp();
+//		}
     /* USER CODE END WHILE */
 
-  MX_TouchGFX_Process();
     /* USER CODE BEGIN 3 */
 		
 	}
@@ -260,7 +401,6 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSE, RCC_MCODIV_1);
 }
 
 /**
@@ -312,32 +452,6 @@ static void MX_ADC3_Init(void)
   /* USER CODE BEGIN ADC3_Init 2 */
 
   /* USER CODE END ADC3_Init 2 */
-
-}
-
-/**
-  * @brief CRC Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_CRC_Init(void)
-{
-
-  /* USER CODE BEGIN CRC_Init 0 */
-
-  /* USER CODE END CRC_Init 0 */
-
-  /* USER CODE BEGIN CRC_Init 1 */
-
-  /* USER CODE END CRC_Init 1 */
-  hcrc.Instance = CRC;
-  if (HAL_CRC_Init(&hcrc) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN CRC_Init 2 */
-
-  /* USER CODE END CRC_Init 2 */
 
 }
 
@@ -433,9 +547,9 @@ static void MX_I2S2_Init(void)
   hi2s2.Instance = SPI2;
   hi2s2.Init.Mode = I2S_MODE_MASTER_TX;
   hi2s2.Init.Standard = I2S_STANDARD_PHILIPS;
-  hi2s2.Init.DataFormat = I2S_DATAFORMAT_16B;
+  hi2s2.Init.DataFormat = I2S_DATAFORMAT_24B;
   hi2s2.Init.MCLKOutput = I2S_MCLKOUTPUT_ENABLE;
-  hi2s2.Init.AudioFreq = I2S_AUDIOFREQ_44K;
+  hi2s2.Init.AudioFreq = I2S_AUDIOFREQ_48K;
   hi2s2.Init.CPOL = I2S_CPOL_LOW;
   hi2s2.Init.ClockSource = I2S_CLOCK_PLL;
   hi2s2.Init.FullDuplexMode = I2S_FULLDUPLEXMODE_ENABLE;
@@ -592,6 +706,9 @@ static void MX_DMA_Init(void)
   __HAL_RCC_DMA1_CLK_ENABLE();
 
   /* DMA interrupt init */
+  /* DMA1_Stream3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
   /* DMA1_Stream4_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream4_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream4_IRQn);
@@ -646,10 +763,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
   HAL_GPIO_Init(MII_TXD3_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : ULPI_D7_Pin ULPI_D5_Pin ULPI_D6_Pin ULPI_D2_Pin
-                           ULPI_D1_Pin ULPI_D3_Pin ULPI_D4_Pin */
-  GPIO_InitStruct.Pin = ULPI_D7_Pin|ULPI_D5_Pin|ULPI_D6_Pin|ULPI_D2_Pin
-                          |ULPI_D1_Pin|ULPI_D3_Pin|ULPI_D4_Pin;
+  /*Configure GPIO pins : ULPI_D7_Pin ULPI_D6_Pin ULPI_D2_Pin ULPI_D1_Pin
+                           ULPI_D4_Pin */
+  GPIO_InitStruct.Pin = ULPI_D7_Pin|ULPI_D6_Pin|ULPI_D2_Pin|ULPI_D1_Pin
+                          |ULPI_D4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;

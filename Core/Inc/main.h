@@ -143,8 +143,6 @@ void Error_Handler(void);
 #define MicroSDCard_Detect_GPIO_Port GPIOH
 #define DCMI_D4_Pin GPIO_PIN_14
 #define DCMI_D4_GPIO_Port GPIOH
-#define I2S_WS_Pin GPIO_PIN_0
-#define I2S_WS_GPIO_Port GPIOI
 #define VBUS_FS_Pin GPIO_PIN_9
 #define VBUS_FS_GPIO_Port GPIOA
 #define PC15_OSC32_OUT_Pin GPIO_PIN_15
@@ -253,8 +251,8 @@ void Error_Handler(void);
 #define D8_GPIO_Port GPIOE
 #define D11_Pin GPIO_PIN_14
 #define D11_GPIO_Port GPIOE
-#define ULPI_D5_Pin GPIO_PIN_12
-#define ULPI_D5_GPIO_Port GPIOB
+#define I2S_WS_Pin GPIO_PIN_12
+#define I2S_WS_GPIO_Port GPIOB
 #define ULPI_D6_Pin GPIO_PIN_13
 #define ULPI_D6_GPIO_Port GPIOB
 #define D14_Pin GPIO_PIN_9
@@ -278,8 +276,6 @@ void Error_Handler(void);
 #define D9_GPIO_Port GPIOE
 #define D12_Pin GPIO_PIN_15
 #define D12_GPIO_Port GPIOE
-#define ULPI_D3_Pin GPIO_PIN_10
-#define ULPI_D3_GPIO_Port GPIOB
 #define ULPI_D4_Pin GPIO_PIN_11
 #define ULPI_D4_GPIO_Port GPIOB
 #define MII_INT_Pin GPIO_PIN_14

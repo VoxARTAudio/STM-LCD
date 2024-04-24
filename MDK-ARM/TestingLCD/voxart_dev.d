@@ -31,7 +31,6 @@ testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_corte
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h
-testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dac.h
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dac_ex.h
 testinglcd\voxart_dev.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
