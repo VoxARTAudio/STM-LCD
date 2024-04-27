@@ -63,7 +63,6 @@ DMA_HandleTypeDef hdma_i2s2_ext_rx;
 DMA_HandleTypeDef hdma_spi2_tx;
 
 TIM_HandleTypeDef htim7;
-TIM_HandleTypeDef htim10;
 TIM_HandleTypeDef htim11;
 
 UART_HandleTypeDef huart3;
@@ -86,7 +85,8 @@ uint16_t txBuf[8];
 
 uint8_t dataReady;
 
-
+extern enum effectState state;
+extern int pollIMU;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -94,12 +94,11 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_USART3_UART_Init(void);
-static void MX_TIM7_Init(void);
-static void MX_TIM10_Init(void);
 static void MX_FSMC_Init(void);
 static void MX_TIM11_Init(void);
 static void MX_I2S2_Init(void);
 static void MX_I2C1_Init(void);
+static void MX_TIM7_Init(void);
 /* USER CODE BEGIN PFP */
 float l_a0, l_a1, l_a2, l_b1, l_b2, lin_z1, lin_z2, lout_z1, lout_z2;
 float r_a0, r_a1, r_a2, r_b1, r_b2, rin_z1, rin_z2, rout_z1, rout_z2;
@@ -107,38 +106,6 @@ float r_a0, r_a1, r_a2, r_b1, r_b2, rin_z1, rin_z2, rout_z1, rout_z2;
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int Calc_IIR_Left (int inSample) {
-	float inSampleF = (float)inSample;
-	float outSampleF =
-			l_a0 * inSampleF
-			+ l_a1 * lin_z1
-			+ l_a2 * lin_z2
-			- l_b1 * lout_z1
-			- l_b2 * lout_z2;
-	lin_z2 = lin_z1;
-	lin_z1 = inSampleF;
-	lout_z2 = lout_z1;
-	lout_z1 = outSampleF;
-
-	return (int) outSampleF;
-}
-
-int Calc_IIR_Right (int inSample) {
-	float inSampleF = (float)inSample;
-	float outSampleF =
-			r_a0 * inSampleF
-			+ r_a1 * rin_z1
-			+ r_a2 * rin_z2
-			- r_b1 * rout_z1
-			- r_b2 * rout_z2;
-	rin_z2 = rin_z1;
-	rin_z1 = inSampleF;
-	rout_z2 = rout_z1;
-	rout_z1 = outSampleF;
-
-	return (int) outSampleF;
-}
-		 
 void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s) {
 //	inBuff = &adcData[0];
 //	outBuff = &dacData[0];
@@ -157,8 +124,8 @@ void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s) {
 	rSample = lSample;
 
 	//run HP on left channel and LP on right channel
-	lSample = Calc_IIR_Left(lSample);
-	rSample = Calc_IIR_Right(rSample);
+//	lSample = Calc_IIR_Left(lSample);
+//	rSample = Calc_IIR_Right(rSample);
 
 	//restore to buffer
 	txBuf[0] = (lSample>>16)&0xFFFF;
@@ -185,8 +152,8 @@ void HAL_I2SEx_TxRxCpltCallback(I2S_HandleTypeDef *hi2s) {
 	rSample = lSample;
 
 	//run HP on left channel and LP on right channel
-	lSample = Calc_IIR_Left(lSample);
-	rSample = Calc_IIR_Right(rSample);
+//	lSample = Calc_IIR_Left(lSample);
+//	rSample = Calc_IIR_Right(rSample);
 
 	//restore to buffer
 	txBuf[4] = (lSample>>16)&0xFFFF;
@@ -274,14 +241,12 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_USART3_UART_Init();
-  MX_TIM7_Init();
-  MX_TIM10_Init();
   MX_FSMC_Init();
   MX_TIM11_Init();
   MX_I2S2_Init();
   MX_I2C1_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
-
 	
 	BSP_LCD_DisplayOn();
 	HAL_Delay(50);
@@ -296,16 +261,6 @@ int main(void)
 	
 	serialPrintln("[LCD] READY");
 	
-//	HAL_StatusTypeDef audioInOutStatus = HAL_I2SEx_TransmitReceive_DMA(&hi2s2, (uint16_t*)dacData, (uint16_t*)adcData, BUFFER_SIZE);
-    HAL_StatusTypeDef audioInOutStatus = HAL_I2SEx_TransmitReceive_DMA (&hi2s2, txBuf, rxBuf, 4);
-	if(audioInOutStatus != HAL_OK) {
-		BSP_LCD_SetTextColor(LCD_COLOR_RED);
-    BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"   Audio ERR   "); 
-		HAL_GPIO_TogglePin(LED4_GPIO_PORT, LED4_PIN);
-		while(1) {}
-	}
-
-	
 //	if(MPU6050_Init(&hi2c1) == 1) {
 //		BSP_LCD_SetTextColor(LCD_COLOR_RED);
 //		BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"   Power Cycle :(   "); 
@@ -314,22 +269,26 @@ int main(void)
 //		while(1) {}
 //	};
 	
-	if(HAL_TIM_Base_Start_IT(&htim7) == HAL_OK) {
-		serialPrintln("[Timer] TIM7 ENABLED");
-	}
-
+	//HAL_StatusTypeDef audioInOutStatus = HAL_I2SEx_TransmitReceive_DMA(&hi2s2, (uint16_t*)dacData, (uint16_t*)adcData, BUFFER_SIZE);
+  HAL_StatusTypeDef audioInOutStatus = HAL_I2SEx_TransmitReceive_DMA (&hi2s2, txBuf, rxBuf, 4);
+//		
+//	if(audioInOutStatus != HAL_OK) {
+//		BSP_LCD_SetTextColor(LCD_COLOR_RED);
+//    BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"   Audio ERR   "); 
+//		HAL_GPIO_TogglePin(LED4_GPIO_PORT, LED4_PIN);
+//		while(1) {}
+//	}
+//	
+//	if(HAL_TIM_Base_Start_IT(&htim7) == HAL_OK) {
+//		serialPrintln("[Timer] TIM7 ENABLED");
+//	}
+//	
+//	if(HAL_TIM_Base_Start_IT(&htim11) == HAL_OK) {
+//		serialPrintln("[Timer] TIM11 ENABLED");
+//	}
+	
 	BSP_LCD_FillCircle(c.xPos, c.yPos, c.radius);
 	serialPrintln("[Circle] READY");
-	
-	if(HAL_TIM_Base_Start_IT(&htim10) == HAL_OK) {
-		serialPrintln("[Timer] TIM10 ENABLED");
-	}
-
-	if(HAL_TIM_Base_Start_IT(&htim11) == HAL_OK) {
-		serialPrintln("[Timer] TIM11 ENABLED");
-	}
-	
-	serialPrintln("Allen was here");
 	
   /* USER CODE END 2 */
 
@@ -343,6 +302,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+//		if(pollIMU) {
+//			MPU6050_Read_All(&hi2c1, &MPU6050);
+//			pollIMU = 0;
+//		}
 		
 	}
   /* USER CODE END 3 */
@@ -481,7 +444,7 @@ static void MX_TIM7_Init(void)
   htim7.Instance = TIM7;
   htim7.Init.Prescaler = 0;
   htim7.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim7.Init.Period = 65535;
+  htim7.Init.Period = 839;
   htim7.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim7) != HAL_OK)
   {
@@ -496,37 +459,6 @@ static void MX_TIM7_Init(void)
   /* USER CODE BEGIN TIM7_Init 2 */
 
   /* USER CODE END TIM7_Init 2 */
-
-}
-
-/**
-  * @brief TIM10 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM10_Init(void)
-{
-
-  /* USER CODE BEGIN TIM10_Init 0 */
-
-  /* USER CODE END TIM10_Init 0 */
-
-  /* USER CODE BEGIN TIM10_Init 1 */
-
-  /* USER CODE END TIM10_Init 1 */
-  htim10.Instance = TIM10;
-  htim10.Init.Prescaler = 0;
-  htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim10.Init.Period = 65535;
-  htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim10.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim10) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM10_Init 2 */
-
-  /* USER CODE END TIM10_Init 2 */
 
 }
 
@@ -546,9 +478,9 @@ static void MX_TIM11_Init(void)
 
   /* USER CODE END TIM11_Init 1 */
   htim11.Instance = TIM11;
-  htim11.Init.Prescaler = 99;
+  htim11.Init.Prescaler = 0;
   htim11.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim11.Init.Period = 839;
+  htim11.Init.Period = 16799;
   htim11.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim11.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim11) != HAL_OK)

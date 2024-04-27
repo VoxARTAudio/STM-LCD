@@ -21,10 +21,13 @@ enum effectState state = NONE;
 void setStates() {
 	if(MPU6050.KalmanAngleX > -10 && MPU6050.KalmanAngleX < 10 && MPU6050.KalmanAngleY > -10 && MPU6050.KalmanAngleY < 10 && state != PITCH) {
 		state = NONE;
+		BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"Idle   ");
 	} else if(MPU6050.KalmanAngleX > -10 && MPU6050.KalmanAngleX < 6 && MPU6050.KalmanAngleY > 100 && MPU6050.KalmanAngleY < 120 && state != PITCH) {
 		state = REVERB;
+		BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"Reverb");
 	} else if(MPU6050.KalmanAngleX > -5 && MPU6050.KalmanAngleX < 5 && MPU6050.KalmanAngleY < -175 && MPU6050.KalmanAngleY > -181 && state != PITCH) {
 		state = CHORUS;
+		BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"Chorus");
 	}
 }
 

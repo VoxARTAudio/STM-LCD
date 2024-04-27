@@ -88,7 +88,7 @@ void serialPrintIMU() {
 	
 	uint8_t MSG[100] = {'\0'};
 	//uint8_t X = 0;
-	sprintf(MSG, "x: %0.1f  y: %0.1f  z: %0.1f\r\n", MPU6050.Ax, MPU6050.Ay, MPU6050.Az);
+	sprintf(MSG, "x: %0.1f  y: %0.1f\r\n", MPU6050.KalmanAngleX, MPU6050.KalmanAngleY);
 	HAL_UART_Transmit(&huart3, MSG, sizeof(MSG), 100);
 }
 	
