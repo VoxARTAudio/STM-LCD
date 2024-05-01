@@ -30,6 +30,7 @@
 #include <math.h>
 #include "voxart_dev.h"
 #include "imu_parser.h"
+#include "audioEffects.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -66,13 +67,12 @@ int pollIMU = 0;
 extern DMA_HandleTypeDef hdma_i2s2_ext_rx;
 extern DMA_HandleTypeDef hdma_spi2_tx;
 extern TIM_HandleTypeDef htim7;
-extern TIM_HandleTypeDef htim10;
-extern TIM_HandleTypeDef htim11;
 /* USER CODE BEGIN EV */
 extern MPU6050_t MPU6050;
 extern circle c;
 extern imuMovement imu;
 extern enum effectState state;
+extern float Shift;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -219,12 +219,13 @@ void SysTick_Handler(void)
 void EXTI0_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI0_IRQn 0 */
+	//PITCH ENABLE BUTTON
 	if(state != PITCH) {
 		state = PITCH;
 		BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"PITCH   ");
 	} else if(state != NONE) {
 		state = NONE;
-		BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"Idle   ");
+		BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"  Idle  ");
 	}
   /* USER CODE END EXTI0_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
@@ -262,85 +263,19 @@ void DMA1_Stream4_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles TIM1 update interrupt and TIM10 global interrupt.
-  */
-void TIM1_UP_TIM10_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 0 */
-	if(state == PITCH) {
-		if(MPU6050.KalmanAngleY > 30 && MPU6050.KalmanAngleY < 80) {
-			updateCircle(0, 0, 2);
-		}
-			
-		if(MPU6050.KalmanAngleY > 80 && MPU6050.KalmanAngleY < 190) {
-			updateCircle(0, 0, 6);
-		}
-		
-		if(MPU6050.KalmanAngleY > -185 && MPU6050.KalmanAngleY < -40) {
-			updateCircle(0, 0, -6);
-		}
-		
-		if(MPU6050.KalmanAngleY > -50 && MPU6050.KalmanAngleY < -20) {
-			updateCircle(0, 0, -2);
-		}
-	}
-	
-	if(state == REVERB) {
-		if(imu.x == 1) {
-			updateCircle(-3, 0, 0);
-		} else if(imu.x == -1) {
-			updateCircle(3, 0, 0);
-		}
-	}
-	
-	if(state == CHORUS) {
-		if(imu.y == 1) {
-			//serialPrintln("Move Circle +Y");
-			updateCircle(0, 3, 0);
-		} else if(imu.y == -1) {
-			//serialPrintln("Move Circle -Y");
-			updateCircle(0, -3, 0);
-		}
-	}
-  /* USER CODE END TIM1_UP_TIM10_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim10);
-  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 1 */
-
-  /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
-}
-
-/**
-  * @brief This function handles TIM1 trigger and commutation interrupts and TIM11 global interrupt.
-  */
-void TIM1_TRG_COM_TIM11_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM1_TRG_COM_TIM11_IRQn 0 */
-	
-
-	parseReverbData();
-	parseChorusData();
-	setStates();
-	
-  /* USER CODE END TIM1_TRG_COM_TIM11_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim11);
-  /* USER CODE BEGIN TIM1_TRG_COM_TIM11_IRQn 1 */
-
-  /* USER CODE END TIM1_TRG_COM_TIM11_IRQn 1 */
-}
-
-/**
   * @brief This function handles EXTI line[15:10] interrupts.
   */
 void EXTI15_10_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI15_10_IRQn 0 */
+	//RESET BUTTON
 	//BSP_LCD_ClearStringLine(3);
 	//BSP_LCD_DisplayStringAtLine(3, (uint8_t *)(toggle == 0 ? pog : champ)); 
 	//toggle = !toggle;
 	
 	//serialPrintln("[Cirlce] Reset position and scale");
 	state = NONE;
-	BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"Idle   ");
+	BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"  Idle  ");
 	/*BSP_LCD_FillCircle(150, 120, 50);
 	c.xPos = 150;
 	c.yPos = 120;
@@ -359,7 +294,58 @@ void TIM7_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM7_IRQn 0 */
 	//MPU6050_Read_All(&hi2c1, &MPU6050);
-	setStates();
+//	switch(state) {
+//		case NONE:
+//			HAL_GPIO_WritePin(LED1_GPIO_PORT, LED1_PIN, GPIO_PIN_SET);
+//			HAL_GPIO_WritePin(LED2_GPIO_PORT, LED2_PIN, GPIO_PIN_RESET);
+//			HAL_GPIO_WritePin(LED3_GPIO_PORT, LED3_PIN, GPIO_PIN_RESET);
+//			HAL_GPIO_WritePin(LED4_GPIO_PORT, LED4_PIN, GPIO_PIN_RESET);
+//		break;
+//		case PITCH:
+//			HAL_GPIO_WritePin(LED1_GPIO_PORT, LED1_PIN, GPIO_PIN_RESET);
+//			HAL_GPIO_WritePin(LED2_GPIO_PORT, LED2_PIN, GPIO_PIN_SET);
+//			HAL_GPIO_WritePin(LED3_GPIO_PORT, LED3_PIN, GPIO_PIN_RESET);
+//			HAL_GPIO_WritePin(LED4_GPIO_PORT, LED4_PIN, GPIO_PIN_RESET);
+//		break;
+//		case REVERB:
+//			HAL_GPIO_WritePin(LED1_GPIO_PORT, LED1_PIN, GPIO_PIN_RESET);
+//			HAL_GPIO_WritePin(LED2_GPIO_PORT, LED2_PIN, GPIO_PIN_RESET);
+//			HAL_GPIO_WritePin(LED3_GPIO_PORT, LED3_PIN, GPIO_PIN_SET);
+//			HAL_GPIO_WritePin(LED4_GPIO_PORT, LED4_PIN, GPIO_PIN_RESET);
+//		break;
+//		case CHORUS:
+//			HAL_GPIO_WritePin(LED1_GPIO_PORT, LED1_PIN, GPIO_PIN_RESET);
+//			HAL_GPIO_WritePin(LED2_GPIO_PORT, LED2_PIN, GPIO_PIN_RESET);
+//			HAL_GPIO_WritePin(LED3_GPIO_PORT, LED3_PIN, GPIO_PIN_RESET);
+//			HAL_GPIO_WritePin(LED4_GPIO_PORT, LED4_PIN, GPIO_PIN_SET);
+//		break;
+//	}
+	
+	switch(state) {
+		case PITCH:
+			if(MPU6050.KalmanAngleY > 30 && MPU6050.KalmanAngleY < 80) {
+				pitchAdjuster(0.1, MPU6050.KalmanAngleY);
+				char* val;
+				snprintf(val, sizeof(val), "%f", Shift);
+				BSP_LCD_DisplayStringAtLine(7, (uint8_t*)val);
+			}
+			
+	//		if(MPU6050.KalmanAngleY > 80 && MPU6050.KalmanAngleY < 190) {
+	//			updateCircle(0, 0, 6);
+	//		}
+	//		
+	//		if(MPU6050.KalmanAngleY > -185 && MPU6050.KalmanAngleY < -40) {
+	//			updateCircle(0, 0, -6);
+	//		}
+			
+			if(MPU6050.KalmanAngleY > -50 && MPU6050.KalmanAngleY < -20) {
+				pitchAdjuster(-0.1, MPU6050.KalmanAngleY);
+				char* val;
+				snprintf(val, sizeof(val), "%f", Shift);
+				BSP_LCD_DisplayStringAtLine(7, (uint8_t*)val);
+			}
+		break;
+	}
   /* USER CODE END TIM7_IRQn 0 */
   HAL_TIM_IRQHandler(&htim7);
   /* USER CODE BEGIN TIM7_IRQn 1 */

@@ -3,8 +3,18 @@
 /************************
 * DEFINES
 ************************/
-#define OVERLAP 100
-#define RING_BUFF_SIZE 1000
+#define BufSize 1000
+#define Overlap 100
+
+//Schroeder delays from 25k->96k interpolated
+//*2 delay extension -> not more possible without external ram
+#define l_CB0 3460*1
+#define l_CB1 2988*1
+#define l_CB2 3882*1
+#define l_CB3 4312*1
+#define l_AP0 480*1
+#define l_AP1 161*1
+#define l_AP2 46*1
 
 /************************
 * EXTERN VARIABLES
@@ -13,15 +23,16 @@
 /************************
 * STRUCTS
 ************************/
-typedef struct {
-	float crossfade;
-	int writePtr;
-	float readPtr;
-	float shift;
-	int Buff[RING_BUFF_SIZE];
-} effect_pitchShift;
 
 /************************
 * FUNCTION PROTOTYPES
 ************************/
-int pitchShift(int lSample, int rSample);
+int Do_HighPass (int inSample);
+int Do_PitchShift(int lSample, int rSample);
+float Do_Comb0(float inSample);
+float Do_Comb1(float inSample); 
+float Do_Comb2(float inSample); 
+float Do_Comb3(float inSample);
+float Do_Allpass1(float inSample);
+float Do_Allpass2(float inSample);
+float Do_Reverb(float inSample);

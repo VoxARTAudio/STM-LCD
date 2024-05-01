@@ -51,5 +51,7 @@ testinglcd\imu_parser.o: ../Core/Inc/../../../Utilities/Fonts/fonts.h
 testinglcd\imu_parser.o: ../Core/Inc/mpu6050.h
 testinglcd\imu_parser.o: ../Core/Inc/i2c.h
 testinglcd\imu_parser.o: ../Core/Inc/voxart_dev.h
+testinglcd\imu_parser.o: ../Core/Inc/audioEffects.h
+testinglcd\imu_parser.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\math.h
 testinglcd\imu_parser.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdio.h
 testinglcd\imu_parser.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdlib.h

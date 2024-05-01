@@ -55,3 +55,4 @@ testinglcd\stm32f4xx_it.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\mat
 testinglcd\stm32f4xx_it.o: ../Core/Inc/voxart_dev.h
 testinglcd\stm32f4xx_it.o: ../Core/Inc/imu_parser.h
 testinglcd\stm32f4xx_it.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdbool.h
+testinglcd\stm32f4xx_it.o: ../Core/Inc/audioEffects.h

@@ -64,8 +64,6 @@ DMA_HandleTypeDef hdma_i2s2_ext_rx;
 DMA_HandleTypeDef hdma_spi2_tx;
 
 TIM_HandleTypeDef htim7;
-TIM_HandleTypeDef htim10;
-TIM_HandleTypeDef htim11;
 
 UART_HandleTypeDef huart3;
 
@@ -76,12 +74,14 @@ MPU6050_t MPU6050;
 circle c = {50, 150, 120};
 imuMovement imu = {0, 0, 0, NO};
 
-extern enum effectState state;
-
 uint16_t rxBuf[8];
 uint16_t txBuf[8];
 
 int i2cReady = 0;
+
+extern enum effectState state;
+extern float wet;
+
 
 /* USER CODE END PV */
 
@@ -91,11 +91,9 @@ static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_FSMC_Init(void);
-static void MX_TIM11_Init(void);
 static void MX_I2S2_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_TIM7_Init(void);
-static void MX_TIM10_Init(void);
 /* USER CODE BEGIN PFP */
 void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s);
 void HAL_I2SEx_TxRxCpltCallback(I2S_HandleTypeDef *hi2s);
@@ -107,19 +105,29 @@ void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s) {
 	//restore signed 24 bit sample from 16-bit buffers
 	int lSample = (int) (rxBuf[0]<<16)|rxBuf[1];
 	int rSample = (int) (rxBuf[2]<<16)|rxBuf[3];
+	
+	int ret_sample = Do_PitchShift(lSample, rSample);
+	lSample = ret_sample;
+	rSample = ret_sample;
+	
+	float sum = (float) (lSample + rSample);
+	sum = (1.0f-wet)*sum + wet*Do_Reverb(sum);
 
-	// divide by 2 (rightshift) -> -3dB per sample
-	lSample = lSample>>1;
-	rSample = rSample>>1;
-
-	//sum to mono
-	lSample = rSample + lSample;
+	lSample = (int) sum;
 	rSample = lSample;
 
+	// divide by 2 (rightshift) -> -3dB per sample
+//	lSample = lSample>>1;
+//	rSample = rSample>>1;
+
+//	//sum to mono
+//	lSample = rSample + lSample;
+//	rSample = lSample;
+
 	//AUDIO EFFECTS GO HERE
-//	int sample = pitchShift(lSample, rSample);
-//	lSample = sample;
-//	rSample = sample;
+//	int pitchSample = pitchShift(lSample, rSample);
+//	lSample = pitchSample;
+//	rSample = pitchSample;
 
 	//restore to buffer
 	txBuf[0] = (lSample>>16)&0xFFFF;
@@ -132,19 +140,29 @@ void HAL_I2SEx_TxRxCpltCallback(I2S_HandleTypeDef *hi2s) {
 	//restore signed 24 bit sample from 16-bit buffers
 	int lSample = (int) (rxBuf[4]<<16)|rxBuf[5];
 	int rSample = (int) (rxBuf[6]<<16)|rxBuf[7];
+	
+	int ret_sample = Do_PitchShift(lSample, rSample);
+	lSample = ret_sample;
+	rSample = ret_sample;
+	
+	float sum = (float) (lSample + rSample);
+	sum = (1.0f-wet)*sum + wet*Do_Reverb(sum);
 
-	// divide by 2 (rightshift) -> -3dB per sample
-	lSample = lSample>>1;
-	rSample = rSample>>1;
-
-	//sum to mono
-	lSample = rSample + lSample;
+	lSample = (int) sum;
 	rSample = lSample;
 
+//	// divide by 2 (rightshift) -> -3dB per sample
+//	lSample = lSample>>1;
+//	rSample = rSample>>1;
+
+//	//sum to mono
+//	lSample = rSample + lSample;
+//	rSample = lSample;
+
 	//AUDIO EFFECTS GO HERE
-//	int sample = pitchShift(lSample, rSample);
-//	lSample = sample;
-//	rSample = sample;
+//	int pitchSample = pitchShift(lSample, rSample);
+//	lSample = pitchSample;
+//	rSample = pitchSample;
 
 	//restore to buffer
 	txBuf[4] = (lSample>>16)&0xFFFF;
@@ -188,11 +206,9 @@ int main(void)
   MX_DMA_Init();
   MX_USART3_UART_Init();
   MX_FSMC_Init();
-  MX_TIM11_Init();
   MX_I2S2_Init();
   MX_I2C1_Init();
   MX_TIM7_Init();
-  MX_TIM10_Init();
   /* USER CODE BEGIN 2 */
 	
 	BSP_LCD_DisplayOn();
@@ -202,8 +218,8 @@ int main(void)
 		
 	serialPrintln("\n\n+===Good Morning!===+");
 	
-	BSP_LCD_DisplayStringAtLine(1, ( uint8_t *)"      VoxArt      "); 
-	BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"Idle   ");
+	BSP_LCD_DisplayStringAtLine(1, ( uint8_t *)"VoxArt"); 
+	BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"  Idle  ");
 
 	HAL_Delay(1000);
 	
@@ -224,7 +240,7 @@ int main(void)
   HAL_StatusTypeDef audioInOutStatus = HAL_I2SEx_TransmitReceive_DMA (&hi2s2, txBuf, rxBuf, 4);
 	if(audioInOutStatus != HAL_OK) {
 		BSP_LCD_SetTextColor(LCD_COLOR_RED);
-    BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"   Audio ERR   "); 
+    BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"   Audio ERR   ");
 		HAL_GPIO_TogglePin(LED4_GPIO_PORT, LED4_PIN);
 		while(1) {}
 	}
@@ -232,9 +248,9 @@ int main(void)
 	//BSP_LCD_FillCircle(c.xPos, c.yPos, c.radius);
 	//serialPrintln("[Circle] READY");
 
-//	if(HAL_TIM_Base_Start_IT(&htim7) == HAL_OK) {
-//		serialPrintln("[Timer] TIM7 ENABLED");
-//	}
+	if(HAL_TIM_Base_Start_IT(&htim7) == HAL_OK) {
+		serialPrintln("[Timer] TIM7 ENABLED");
+	}
 	
 //	if(HAL_TIM_Base_Start_IT(&htim11) == HAL_OK) {
 //		serialPrintln("[Timer] TIM11 ENABLED");
@@ -252,10 +268,10 @@ int main(void)
 	{
 		if(i2cReady) {
 			MPU6050_Read_All(&hi2c1, &MPU6050);
+			setStates();
 			HAL_Delay(100);
 			//parseReverbData();
 			//parseChorusData();
-			setStates();
 		}
 //		if(dataReady) {
 //			dsp();
@@ -263,10 +279,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-//		if(pollIMU) {
-//			MPU6050_Read_All(&hi2c1, &MPU6050);
-//			pollIMU = 0;
-//		}
 	
 	}
   /* USER CODE END 3 */
@@ -420,68 +432,6 @@ static void MX_TIM7_Init(void)
   /* USER CODE BEGIN TIM7_Init 2 */
 
   /* USER CODE END TIM7_Init 2 */
-
-}
-
-/**
-  * @brief TIM10 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM10_Init(void)
-{
-
-  /* USER CODE BEGIN TIM10_Init 0 */
-
-  /* USER CODE END TIM10_Init 0 */
-
-  /* USER CODE BEGIN TIM10_Init 1 */
-
-  /* USER CODE END TIM10_Init 1 */
-  htim10.Instance = TIM10;
-  htim10.Init.Prescaler = 2;
-  htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim10.Init.Period = 55999;
-  htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim10.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim10) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM10_Init 2 */
-
-  /* USER CODE END TIM10_Init 2 */
-
-}
-
-/**
-  * @brief TIM11 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM11_Init(void)
-{
-
-  /* USER CODE BEGIN TIM11_Init 0 */
-
-  /* USER CODE END TIM11_Init 0 */
-
-  /* USER CODE BEGIN TIM11_Init 1 */
-
-  /* USER CODE END TIM11_Init 1 */
-  htim11.Instance = TIM11;
-  htim11.Init.Prescaler = 2;
-  htim11.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim11.Init.Period = 55999;
-  htim11.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim11.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim11) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM11_Init 2 */
-
-  /* USER CODE END TIM11_Init 2 */
 
 }
 

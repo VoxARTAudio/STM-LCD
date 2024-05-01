@@ -1,5 +1,9 @@
 #include <stdbool.h>
 
+#define SHIFT_MAX 1.9f
+#define SHIFT_MIN 0.5f
+
+
 typedef enum {
 	NO,
 	POS,
@@ -23,3 +27,4 @@ typedef struct imuMovement {
 void parseReverbData(void);
 void parseChorusData(void);
 void setStates(void);
+void pitchAdjuster(float inc, float angle);

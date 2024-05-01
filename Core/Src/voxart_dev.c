@@ -92,3 +92,4 @@ void serialPrintIMU() {
 	HAL_UART_Transmit(&huart3, MSG, sizeof(MSG), 100);
 }
 	
+void lcdUpdate();
