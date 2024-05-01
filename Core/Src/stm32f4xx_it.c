@@ -66,6 +66,7 @@ int pollIMU = 0;
 extern DMA_HandleTypeDef hdma_i2s2_ext_rx;
 extern DMA_HandleTypeDef hdma_spi2_tx;
 extern TIM_HandleTypeDef htim7;
+extern TIM_HandleTypeDef htim10;
 extern TIM_HandleTypeDef htim11;
 /* USER CODE BEGIN EV */
 extern MPU6050_t MPU6050;
@@ -220,10 +221,11 @@ void EXTI0_IRQHandler(void)
   /* USER CODE BEGIN EXTI0_IRQn 0 */
 	if(state != PITCH) {
 		state = PITCH;
-	} else {
+		BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"PITCH   ");
+	} else if(state != NONE) {
 		state = NONE;
+		BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"Idle   ");
 	}
-	serialPrintln("KEY PRESSED");
   /* USER CODE END EXTI0_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
   /* USER CODE BEGIN EXTI0_IRQn 1 */
@@ -260,90 +262,12 @@ void DMA1_Stream4_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles TIM1 trigger and commutation interrupts and TIM11 global interrupt.
+  * @brief This function handles TIM1 update interrupt and TIM10 global interrupt.
   */
-void TIM1_TRG_COM_TIM11_IRQHandler(void)
+void TIM1_UP_TIM10_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM1_TRG_COM_TIM11_IRQn 0 */
-//	if(pollIMU == 0) {
-//		pollIMU = 1;
-//	}
-	//MPU6050_Read_All(&hi2c1, &MPU6050);
-	
-	//parseReverbData();
-	//parseChorusData();
-	//serialPrintIMU();
-	setStates();
-//		
-  /* USER CODE END TIM1_TRG_COM_TIM11_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim11);
-  /* USER CODE BEGIN TIM1_TRG_COM_TIM11_IRQn 1 */
-
-  /* USER CODE END TIM1_TRG_COM_TIM11_IRQn 1 */
-}
-
-/**
-  * @brief This function handles EXTI line[15:10] interrupts.
-  */
-void EXTI15_10_IRQHandler(void)
-{
-  /* USER CODE BEGIN EXTI15_10_IRQn 0 */
-	//BSP_LCD_ClearStringLine(3);
-	//BSP_LCD_DisplayStringAtLine(3, (uint8_t *)(toggle == 0 ? pog : champ)); 
-	//toggle = !toggle;
-	BSP_LCD_Clear(LCD_COLOR_WHITE);
-	//serialPrintln("[Cirlce] Reset position and scale");
-	state = NONE;
-	BSP_LCD_FillCircle(150, 120, 50);
-	c.xPos = 150;
-	c.yPos = 120;
-	c.radius = 50;
-  /* USER CODE END EXTI15_10_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(User_Button_Pin);
-  /* USER CODE BEGIN EXTI15_10_IRQn 1 */
-
-  /* USER CODE END EXTI15_10_IRQn 1 */
-}
-
-/**
-  * @brief This function handles TIM7 global interrupt.
-  */
-void TIM7_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM7_IRQn 0 */
-
-  /* USER CODE END TIM7_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim7);
-  /* USER CODE BEGIN TIM7_IRQn 1 */
-//	switch(state) {
-//		case NONE:
-//			HAL_GPIO_WritePin(LED1_GPIO_PORT, LED1_PIN, GPIO_PIN_SET);
-//			HAL_GPIO_WritePin(LED2_GPIO_PORT, LED2_PIN, GPIO_PIN_RESET);
-//			HAL_GPIO_WritePin(LED3_GPIO_PORT, LED3_PIN, GPIO_PIN_RESET);
-//			HAL_GPIO_WritePin(LED4_GPIO_PORT, LED4_PIN, GPIO_PIN_RESET);
-//		break;
-//		case PITCH:
-//			HAL_GPIO_WritePin(LED1_GPIO_PORT, LED1_PIN, GPIO_PIN_RESET);
-//			HAL_GPIO_WritePin(LED2_GPIO_PORT, LED2_PIN, GPIO_PIN_SET);
-//			HAL_GPIO_WritePin(LED3_GPIO_PORT, LED3_PIN, GPIO_PIN_RESET);
-//			HAL_GPIO_WritePin(LED4_GPIO_PORT, LED4_PIN, GPIO_PIN_RESET);
-//		break;
-//		case REVERB:
-//			HAL_GPIO_WritePin(LED1_GPIO_PORT, LED1_PIN, GPIO_PIN_RESET);
-//			HAL_GPIO_WritePin(LED2_GPIO_PORT, LED2_PIN, GPIO_PIN_RESET);
-//			HAL_GPIO_WritePin(LED3_GPIO_PORT, LED3_PIN, GPIO_PIN_SET);
-//			HAL_GPIO_WritePin(LED4_GPIO_PORT, LED4_PIN, GPIO_PIN_RESET);
-//		break;
-//		case CHORUS:
-//			HAL_GPIO_WritePin(LED1_GPIO_PORT, LED1_PIN, GPIO_PIN_RESET);
-//			HAL_GPIO_WritePin(LED2_GPIO_PORT, LED2_PIN, GPIO_PIN_RESET);
-//			HAL_GPIO_WritePin(LED3_GPIO_PORT, LED3_PIN, GPIO_PIN_RESET);
-//			HAL_GPIO_WritePin(LED4_GPIO_PORT, LED4_PIN, GPIO_PIN_SET);
-//		break;
-//	}
-		
-	
-		if(state == PITCH) {
+  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 0 */
+	if(state == PITCH) {
 		if(MPU6050.KalmanAngleY > 30 && MPU6050.KalmanAngleY < 80) {
 			updateCircle(0, 0, 2);
 		}
@@ -378,6 +302,68 @@ void TIM7_IRQHandler(void)
 			updateCircle(0, -3, 0);
 		}
 	}
+  /* USER CODE END TIM1_UP_TIM10_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim10);
+  /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 1 */
+
+  /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM1 trigger and commutation interrupts and TIM11 global interrupt.
+  */
+void TIM1_TRG_COM_TIM11_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM1_TRG_COM_TIM11_IRQn 0 */
+	
+
+	parseReverbData();
+	parseChorusData();
+	setStates();
+	
+  /* USER CODE END TIM1_TRG_COM_TIM11_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim11);
+  /* USER CODE BEGIN TIM1_TRG_COM_TIM11_IRQn 1 */
+
+  /* USER CODE END TIM1_TRG_COM_TIM11_IRQn 1 */
+}
+
+/**
+  * @brief This function handles EXTI line[15:10] interrupts.
+  */
+void EXTI15_10_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI15_10_IRQn 0 */
+	//BSP_LCD_ClearStringLine(3);
+	//BSP_LCD_DisplayStringAtLine(3, (uint8_t *)(toggle == 0 ? pog : champ)); 
+	//toggle = !toggle;
+	
+	//serialPrintln("[Cirlce] Reset position and scale");
+	state = NONE;
+	BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"Idle   ");
+	/*BSP_LCD_FillCircle(150, 120, 50);
+	c.xPos = 150;
+	c.yPos = 120;
+	c.radius = 50; */
+  /* USER CODE END EXTI15_10_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(User_Button_Pin);
+  /* USER CODE BEGIN EXTI15_10_IRQn 1 */
+
+  /* USER CODE END EXTI15_10_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM7 global interrupt.
+  */
+void TIM7_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM7_IRQn 0 */
+	//MPU6050_Read_All(&hi2c1, &MPU6050);
+	setStates();
+  /* USER CODE END TIM7_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim7);
+  /* USER CODE BEGIN TIM7_IRQn 1 */
+
   /* USER CODE END TIM7_IRQn 1 */
 }
 

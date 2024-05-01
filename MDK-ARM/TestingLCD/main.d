@@ -53,3 +53,5 @@ testinglcd\main.o: ../Core/Inc/i2c.h
 testinglcd\main.o: ../Core/Inc/voxart_dev.h
 testinglcd\main.o: ../Core/Inc/imu_parser.h
 testinglcd\main.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\stdbool.h
+testinglcd\main.o: ../Core/Inc/audioEffects.h
+testinglcd\main.o: C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin\..\include\math.h

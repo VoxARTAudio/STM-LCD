@@ -44,6 +44,8 @@
 #define TEMP_OUT_H_REG 0x41
 #define GYRO_CONFIG_REG 0x1B
 #define GYRO_XOUT_H_REG 0x43
+#define INT_PIN_CFG 0x37
+#define INT_PIN_ENABLE 0x38
 
 // Setup MPU6050
 #define MPU6050_ADDR 0xD0
@@ -66,10 +68,13 @@ Kalman_t KalmanY = {
 uint8_t MPU6050_Init(I2C_HandleTypeDef *I2Cx)
 {
     uint8_t check;
-    uint8_t Data;
-
+    uint8_t Data = 0;
+	
+	
+		//Wake up the sensor using all 0's
+	  HAL_I2C_Mem_Write(I2Cx, MPU6050_ADDR, PWR_MGMT_1_REG, 1, &Data, 1, i2c_timeout);
+		HAL_Delay(50);
     // check device ID WHO_AM_I
-
     HAL_I2C_Mem_Read(I2Cx, MPU6050_ADDR, WHO_AM_I_REG, 1, &check, 1, i2c_timeout);
 
     if (check == 104) // 0x68 will be returned by the sensor if everything goes well
@@ -92,6 +97,14 @@ uint8_t MPU6050_Init(I2C_HandleTypeDef *I2Cx)
         // XG_ST=0,YG_ST=0,ZG_ST=0, FS_SEL=0 -> � 250 �/s
         Data = 0x00;
         HAL_I2C_Mem_Write(I2Cx, MPU6050_ADDR, GYRO_CONFIG_REG, 1, &Data, 1, i2c_timeout);
+			
+//				//Enable interrupt pin
+//				Data = 1 << 4;
+//        HAL_I2C_Mem_Write(I2Cx, MPU6050_ADDR, INT_PIN_CFG, 1, &Data, 1, i2c_timeout);
+//				
+//				//Enable interrupts
+//				Data = 1 << 0;
+//        HAL_I2C_Mem_Write(I2Cx, MPU6050_ADDR, INT_PIN_ENABLE, 1, &Data, 1, i2c_timeout);
         return 0;
     }
     return 1;
@@ -156,6 +169,8 @@ void MPU6050_Read_Temp(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct)
 
 void MPU6050_Read_All(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct)
 {
+	
+	
     uint8_t Rec_Data[14];
     int16_t temp;
 
@@ -163,7 +178,7 @@ void MPU6050_Read_All(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct)
 
     HAL_I2C_Mem_Read(I2Cx, MPU6050_ADDR, ACCEL_XOUT_H_REG, 1, Rec_Data, 14, i2c_timeout);
 
-    DataStruct->Accel_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
+		DataStruct->Accel_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
     DataStruct->Accel_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data[3]);
     DataStruct->Accel_Z_RAW = (int16_t)(Rec_Data[4] << 8 | Rec_Data[5]);
     temp = (int16_t)(Rec_Data[6] << 8 | Rec_Data[7]);

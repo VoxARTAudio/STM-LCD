@@ -1,7 +1,7 @@
 Dependencies for Project 'TestingLCD', Target 'TestingLCD': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARM_Compiler_5.06u7
-F (startup_stm32f407xx.s)(0x662D8716)(--cpu Cortex-M4.fp.sp -g --apcs=interwork -I.\RTE\_TestingLCD-IC:\Users\student\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\student\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include--pd "__UVISION_VERSION SETA 539" --pd "_RTE_ SETA 1" --pd "STM32F407xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f407xx.lst --xref -o testinglcd\startup_stm32f407xx.o --depend testinglcd\startup_stm32f407xx.d)
-F (..\Core\Src\mpu6050.c)(0x662D6A25)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/BSP/STM324xG_EVAL -I ../Drivers/BSP/Components/ili9325 -I ../Drivers/BSP/Components/stmpe811-I.\RTE\_TestingLCD-IC:\Users\student\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\student\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o testinglcd\mpu6050.o --omf_browse testinglcd\mpu6050.crf --depend testinglcd\mpu6050.d)
+F (startup_stm32f407xx.s)(0x66317F89)(--cpu Cortex-M4.fp.sp -g --apcs=interwork -I.\RTE\_TestingLCD-IC:\Users\student\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\student\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include--pd "__UVISION_VERSION SETA 539" --pd "_RTE_ SETA 1" --pd "STM32F407xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f407xx.lst --xref -o testinglcd\startup_stm32f407xx.o --depend testinglcd\startup_stm32f407xx.d)
+F (..\Core\Src\mpu6050.c)(0x663025EC)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/BSP/STM324xG_EVAL -I ../Drivers/BSP/Components/ili9325 -I ../Drivers/BSP/Components/stmpe811-I.\RTE\_TestingLCD-IC:\Users\student\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\student\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o testinglcd\mpu6050.o --omf_browse testinglcd\mpu6050.crf --depend testinglcd\mpu6050.d)
 I (C:\Keil_v5\ARM\ARM_Compiler_5.06u7\include\math.h)(0x5E8F1DC2)
 I (../Core/Inc/mpu6050.h)(0x6611D1FA)
 I (C:\Keil_v5\ARM\ARM_Compiler_5.06u7\include\stdint.h)(0x5E8F1DC2)
@@ -96,7 +96,7 @@ I (../Drivers/BSP/STM324xG_EVAL/stm324xg_eval_io.h)(0x6611D1FA)
 I (../Drivers/BSP/STM324xG_EVAL/../Components/stmpe811/stmpe811.h)(0x6611D1FA)
 I (../Drivers/BSP/STM324xG_EVAL/../Components/stmpe811/../Common/ts.h)(0x6611D1FA)
 I (../Drivers/BSP/STM324xG_EVAL/../Components/stmpe811/../Common/io.h)(0x6611D1FA)
-F (..\Core\Src\imu_parser.c)(0x662D87E1)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/BSP/STM324xG_EVAL -I ../Drivers/BSP/Components/ili9325 -I ../Drivers/BSP/Components/stmpe811-I.\RTE\_TestingLCD-IC:\Users\student\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\student\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o testinglcd\imu_parser.o --omf_browse testinglcd\imu_parser.crf --depend testinglcd\imu_parser.d)
+F (..\Core\Src\imu_parser.c)(0x663189A0)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/BSP/STM324xG_EVAL -I ../Drivers/BSP/Components/ili9325 -I ../Drivers/BSP/Components/stmpe811-I.\RTE\_TestingLCD-IC:\Users\student\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\student\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o testinglcd\imu_parser.o --omf_browse testinglcd\imu_parser.crf --depend testinglcd\imu_parser.d)
 I (../Core/Inc/main.h)(0x662C0F2C)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65FF6139)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x662C2366)
@@ -150,7 +150,47 @@ I (../Core/Inc/i2c.h)(0x6611D1FA)
 I (../Core/Inc/voxart_dev.h)(0x6611D1FA)
 I (C:\Keil_v5\ARM\ARM_Compiler_5.06u7\include\stdio.h)(0x5E8F1DC2)
 I (C:\Keil_v5\ARM\ARM_Compiler_5.06u7\include\stdlib.h)(0x5E8F1DC2)
-F (../Core/Src/main.c)(0x662D8C1B)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/BSP/STM324xG_EVAL -I ../Drivers/BSP/Components/ili9325 -I ../Drivers/BSP/Components/stmpe811-I.\RTE\_TestingLCD-IC:\Users\student\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\student\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o testinglcd\main.o --omf_browse testinglcd\main.crf --depend testinglcd\main.d)
+F (..\Core\Src\audioEffects.c)(0x6631A247)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/BSP/STM324xG_EVAL -I ../Drivers/BSP/Components/ili9325 -I ../Drivers/BSP/Components/stmpe811-I.\RTE\_TestingLCD-IC:\Users\student\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\student\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o testinglcd\audioeffects.o --omf_browse testinglcd\audioeffects.crf --depend testinglcd\audioeffects.d)
+I (../Core/Inc/audioEffects.h)(0x6631A1EC)
+I (../Core/Inc/main.h)(0x662C0F2C)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65FF6139)
+I (../Core/Inc/stm32f4xx_hal_conf.h)(0x662C2366)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h)(0x65FF6139)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x65FF6134)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x65FF6134)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x65FF6139)
+I (C:\Keil_v5\ARM\ARM_Compiler_5.06u7\include\stdint.h)(0x5E8F1DC2)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x65FF6139)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x65FF6139)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x65FF6139)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x65FF6139)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h)(0x65FF6134)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x65FF6139)
+I (C:\Keil_v5\ARM\ARM_Compiler_5.06u7\include\stddef.h)(0x5E8F1DC2)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sram.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_fsmc.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2s.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2s_ex.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x65FF6139)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x65FF6139)
+I (C:\Keil_v5\ARM\ARM_Compiler_5.06u7\include\math.h)(0x5E8F1DC2)
+F (../Core/Src/main.c)(0x6631A268)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/BSP/STM324xG_EVAL -I ../Drivers/BSP/Components/ili9325 -I ../Drivers/BSP/Components/stmpe811-I.\RTE\_TestingLCD-IC:\Users\student\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\student\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o testinglcd\main.o --omf_browse testinglcd\main.crf --depend testinglcd\main.d)
 I (../Core/Inc/main.h)(0x662C0F2C)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65FF6139)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x662C2366)
@@ -204,7 +244,9 @@ I (../Core/Inc/i2c.h)(0x6611D1FA)
 I (../Core/Inc/voxart_dev.h)(0x6611D1FA)
 I (../Core/Inc/imu_parser.h)(0x6611D1FA)
 I (C:\Keil_v5\ARM\ARM_Compiler_5.06u7\include\stdbool.h)(0x5E8F1DC2)
-F (../Core/Src/stm32f4xx_it.c)(0x662D8BF0)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/BSP/STM324xG_EVAL -I ../Drivers/BSP/Components/ili9325 -I ../Drivers/BSP/Components/stmpe811-I.\RTE\_TestingLCD-IC:\Users\student\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\student\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o testinglcd\stm32f4xx_it.o --omf_browse testinglcd\stm32f4xx_it.crf --depend testinglcd\stm32f4xx_it.d)
+I (../Core/Inc/audioEffects.h)(0x6631A1EC)
+I (C:\Keil_v5\ARM\ARM_Compiler_5.06u7\include\math.h)(0x5E8F1DC2)
+F (../Core/Src/stm32f4xx_it.c)(0x6631A243)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/BSP/STM324xG_EVAL -I ../Drivers/BSP/Components/ili9325 -I ../Drivers/BSP/Components/stmpe811-I.\RTE\_TestingLCD-IC:\Users\student\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\student\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o testinglcd\stm32f4xx_it.o --omf_browse testinglcd\stm32f4xx_it.crf --depend testinglcd\stm32f4xx_it.d)
 I (../Core/Inc/main.h)(0x662C0F2C)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65FF6139)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x662C2366)
@@ -242,7 +284,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x65FF6139)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x65FF6139)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x65FF6139)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x65FF6139)
-I (../Core/Inc/stm32f4xx_it.h)(0x662D7BFC)
+I (../Core/Inc/stm32f4xx_it.h)(0x663166AF)
 I (../Drivers/BSP/STM324xG_EVAL/stm324xg_eval_lcd.h)(0x6611D1FA)
 I (../Drivers/BSP/STM324xG_EVAL/stm324xg_eval.h)(0x6611D1FA)
 I (../Drivers/BSP/STM324xG_EVAL/../Components/ili9325/ili9325.h)(0x6611D1FA)
@@ -260,46 +302,7 @@ I (C:\Keil_v5\ARM\ARM_Compiler_5.06u7\include\math.h)(0x5E8F1DC2)
 I (../Core/Inc/voxart_dev.h)(0x6611D1FA)
 I (../Core/Inc/imu_parser.h)(0x6611D1FA)
 I (C:\Keil_v5\ARM\ARM_Compiler_5.06u7\include\stdbool.h)(0x5E8F1DC2)
-F (../Core/Src/stm32f4xx_hal_msp.c)(0x662D7BFC)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/BSP/STM324xG_EVAL -I ../Drivers/BSP/Components/ili9325 -I ../Drivers/BSP/Components/stmpe811-I.\RTE\_TestingLCD-IC:\Users\student\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\student\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o testinglcd\stm32f4xx_hal_msp.o --omf_browse testinglcd\stm32f4xx_hal_msp.crf --depend testinglcd\stm32f4xx_hal_msp.d)
-I (../Core/Inc/main.h)(0x662C0F2C)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65FF6139)
-I (../Core/Inc/stm32f4xx_hal_conf.h)(0x662C2366)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h)(0x65FF6139)
-I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x65FF6134)
-I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h)(0x65FF6134)
-I (../Drivers/CMSIS/Include/core_cm4.h)(0x65FF6139)
-I (C:\Keil_v5\ARM\ARM_Compiler_5.06u7\include\stdint.h)(0x5E8F1DC2)
-I (../Drivers/CMSIS/Include/cmsis_version.h)(0x65FF6139)
-I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x65FF6139)
-I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x65FF6139)
-I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x65FF6139)
-I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h)(0x65FF6134)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h)(0x65FF6139)
-I (C:\Keil_v5\ARM\ARM_Compiler_5.06u7\include\stddef.h)(0x5E8F1DC2)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sram.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_fsmc.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2s.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2s_ex.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x65FF6139)
-I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x65FF6139)
-F (..\Core\Src\audioEffects.c)(0x662D8BE5)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/BSP/STM324xG_EVAL -I ../Drivers/BSP/Components/ili9325 -I ../Drivers/BSP/Components/stmpe811-I.\RTE\_TestingLCD-IC:\Users\student\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\student\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o testinglcd\audioeffects.o --omf_browse testinglcd\audioeffects.crf --depend testinglcd\audioeffects.d)
-I (../Core/Inc/audioEffects.h)(0x662D8BE3)
+F (../Core/Src/stm32f4xx_hal_msp.c)(0x663166B0)(--c99 -c --cpu Cortex-M4.fp.sp -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../Drivers/BSP/STM324xG_EVAL -I ../Drivers/BSP/Components/ili9325 -I ../Drivers/BSP/Components/stmpe811-I.\RTE\_TestingLCD-IC:\Users\student\AppData\Local\Arm\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include-IC:\Users\student\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o testinglcd\stm32f4xx_hal_msp.o --omf_browse testinglcd\stm32f4xx_hal_msp.crf --depend testinglcd\stm32f4xx_hal_msp.d)
 I (../Core/Inc/main.h)(0x662C0F2C)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65FF6139)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x662C2366)
