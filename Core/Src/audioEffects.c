@@ -1,3 +1,8 @@
+/*
+* Audio Effects Library by Phil
+* https://github.com/YetAnotherElectronicsChannel/
+*/
+
 #include "audioEffects.h"
 
 /************************

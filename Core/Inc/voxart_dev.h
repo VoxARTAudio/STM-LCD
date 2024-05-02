@@ -11,3 +11,5 @@ void serialPrint(char* msg);
 void serialPrintln(char* msg);
 
 void serialPrintIMU(void);
+
+void lcdUpdatePitch(float newValue);

@@ -27,11 +27,14 @@ Project File Date:  05/01/2024
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARM_Compiler_5.06u7\Bin'
 Build target 'TestingLCD'
-compiling audioEffects.c...
+compiling imu_parser.c...
+..\Core\Src\imu_parser.c(40): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  	float cmp = 1.0+(((angle - pitchZeroAngle)/90.0)/3.0);
+..\Core\Src\imu_parser.c: 1 warning, 0 errors
 linking...
-Program Size: Code=28520 RO-data=7656 RW-data=436 ZI-data=83148  
+Program Size: Code=24652 RO-data=7476 RW-data=436 ZI-data=83148  
 FromELF: creating hex file...
-"TestingLCD\TestingLCD.axf" - 0 Error(s), 0 Warning(s).
+"TestingLCD\TestingLCD.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 

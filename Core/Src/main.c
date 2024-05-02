@@ -81,6 +81,7 @@ int i2cReady = 0;
 
 extern enum effectState state;
 extern float wet;
+extern float Shift;
 
 /* USER CODE END PV */
 
@@ -219,6 +220,7 @@ int main(void)
 	
 	BSP_LCD_DisplayStringAtLine(1, ( uint8_t *)"VoxArt"); 
 	BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"  Idle  ");
+	BSP_LCD_DisplayStringAtLine(6, (uint8_t*)"Pitch Shift Value");
 
 	HAL_Delay(1000);
 	

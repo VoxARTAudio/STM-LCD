@@ -21,6 +21,8 @@ extern float pitchZeroAngle;
 
 enum effectState state = NONE;
 
+char* dispValue;
+
 void setStates() {
 	if(MPU6050.KalmanAngleX > -10 && MPU6050.KalmanAngleX < 10 && MPU6050.KalmanAngleY > -10 && MPU6050.KalmanAngleY < 10 && state != PITCH && state != NONE) {
 		state = NONE;
@@ -34,8 +36,8 @@ void setStates() {
 	}
 }
 
-void pitchAdjuster(float inc, float angle) {
-	float cmp = angle - pitchZeroAngle;
+void pitchAdjuster(float angle) {
+	float cmp = 1.0+(((angle - pitchZeroAngle)/90.0)/3.0);
 	if(cmp < SHIFT_MIN) {
 		Shift = SHIFT_MIN;
 	} else if(cmp > SHIFT_MAX) {

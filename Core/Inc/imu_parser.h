@@ -27,4 +27,4 @@ typedef struct imuMovement {
 void parseReverbData(void);
 void parseChorusData(void);
 void setStates(void);
-void pitchAdjuster(float inc, float angle);
+void pitchAdjuster(float angle);

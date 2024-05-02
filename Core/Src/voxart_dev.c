@@ -92,4 +92,9 @@ void serialPrintIMU() {
 	HAL_UART_Transmit(&huart3, MSG, sizeof(MSG), 100);
 }
 	
-void lcdUpdate();
+void lcdUpdatePitch(float newValue) {
+	char* lcdDataValue;
+	
+	sprintf(lcdDataValue, "%f", newValue);
+	BSP_LCD_DisplayStringAtLine(7, (uint8_t*)lcdDataValue);
+}

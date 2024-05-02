@@ -228,6 +228,7 @@ void EXTI0_IRQHandler(void)
 	} else if(state != NONE) {
 		state = NONE;
 		BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"  Idle  ");
+		//lcdUpdatePitch(Shift);
 	}
   /* USER CODE END EXTI0_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
@@ -277,6 +278,7 @@ void EXTI15_10_IRQHandler(void)
 	
 	//serialPrintln("[Cirlce] Reset position and scale");
 	state = NONE;
+	Shift = 1.0f;
 	BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"  Idle  ");
 	/*BSP_LCD_FillCircle(150, 120, 50);
 	c.xPos = 150;
@@ -325,27 +327,7 @@ void TIM7_IRQHandler(void)
 	
 	switch(state) {
 		case PITCH:
-			if(MPU6050.KalmanAngleY > 30 && MPU6050.KalmanAngleY < 80) {
-				pitchAdjuster(0.1, MPU6050.KalmanAngleY);
-				char* val;
-				snprintf(val, sizeof(val), "%f", Shift);
-				BSP_LCD_DisplayStringAtLine(7, (uint8_t*)val);
-			}
-			
-	//		if(MPU6050.KalmanAngleY > 80 && MPU6050.KalmanAngleY < 190) {
-	//			updateCircle(0, 0, 6);
-	//		}
-	//		
-	//		if(MPU6050.KalmanAngleY > -185 && MPU6050.KalmanAngleY < -40) {
-	//			updateCircle(0, 0, -6);
-	//		}
-			
-			if(MPU6050.KalmanAngleY > -50 && MPU6050.KalmanAngleY < -20) {
-				pitchAdjuster(-0.1, MPU6050.KalmanAngleY);
-				char* val;
-				snprintf(val, sizeof(val), "%f", Shift);
-				BSP_LCD_DisplayStringAtLine(7, (uint8_t*)val);
-			}
+			pitchAdjuster(MPU6050.KalmanAngleY);
 		break;
 	}
   /* USER CODE END TIM7_IRQn 0 */
