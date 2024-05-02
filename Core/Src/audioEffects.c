@@ -8,7 +8,7 @@ int Buf[BufSize];
 int WtrP = 0;
 float Rd_P = 0.0f;
 float Shift = 1.0f;
-float CrossFade = 1.0f;
+float CrossFade = 3.0f;
 float a0, a1, a2, b1, b2, hp_in_z1, hp_in_z2, hp_out_z1, hp_out_z2;
 
 int Do_HighPass (int inSample) {

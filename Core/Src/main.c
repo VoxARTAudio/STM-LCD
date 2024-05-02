@@ -82,7 +82,6 @@ int i2cReady = 0;
 extern enum effectState state;
 extern float wet;
 
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -109,12 +108,12 @@ void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s) {
 	int ret_sample = Do_PitchShift(lSample, rSample);
 	lSample = ret_sample;
 	rSample = ret_sample;
-	
-	float sum = (float) (lSample + rSample);
-	sum = (1.0f-wet)*sum + wet*Do_Reverb(sum);
+//	
+//	float sum = (float) (lSample + rSample);
+//	sum = (1.0f-wet)*sum + wet*Do_Reverb(sum);
 
-	lSample = (int) sum;
-	rSample = lSample;
+//	lSample = (int) sum;
+//	rSample = lSample;
 
 	// divide by 2 (rightshift) -> -3dB per sample
 //	lSample = lSample>>1;
@@ -145,11 +144,11 @@ void HAL_I2SEx_TxRxCpltCallback(I2S_HandleTypeDef *hi2s) {
 	lSample = ret_sample;
 	rSample = ret_sample;
 	
-	float sum = (float) (lSample + rSample);
-	sum = (1.0f-wet)*sum + wet*Do_Reverb(sum);
+//	float sum = (float) (lSample + rSample);
+//	sum = (1.0f-wet)*sum + wet*Do_Reverb(sum);
 
-	lSample = (int) sum;
-	rSample = lSample;
+//	lSample = (int) sum;
+//	rSample = lSample;
 
 //	// divide by 2 (rightshift) -> -3dB per sample
 //	lSample = lSample>>1;
@@ -252,14 +251,6 @@ int main(void)
 		serialPrintln("[Timer] TIM7 ENABLED");
 	}
 	
-//	if(HAL_TIM_Base_Start_IT(&htim11) == HAL_OK) {
-//		serialPrintln("[Timer] TIM11 ENABLED");
-//	}
-
-//	if(HAL_TIM_Base_Start_IT(&htim10) == HAL_OK) {
-//		serialPrintln("[Timer] TIM10 ENABLED");
-//	}
-	
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -270,8 +261,6 @@ int main(void)
 			MPU6050_Read_All(&hi2c1, &MPU6050);
 			setStates();
 			HAL_Delay(100);
-			//parseReverbData();
-			//parseChorusData();
 		}
 //		if(dataReady) {
 //			dsp();
@@ -743,7 +732,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : PA0 */
   GPIO_InitStruct.Pin = GPIO_PIN_0;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 

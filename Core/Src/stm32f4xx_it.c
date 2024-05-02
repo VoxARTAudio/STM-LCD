@@ -51,6 +51,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 int pollIMU = 0;
+float pitchZeroAngle;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -222,6 +223,7 @@ void EXTI0_IRQHandler(void)
 	//PITCH ENABLE BUTTON
 	if(state != PITCH) {
 		state = PITCH;
+		pitchZeroAngle = MPU6050.KalmanAngleY;
 		BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"PITCH   ");
 	} else if(state != NONE) {
 		state = NONE;

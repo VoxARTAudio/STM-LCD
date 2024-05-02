@@ -17,6 +17,7 @@ extern imuMovement imu;
 extern TIM_HandleTypeDef htim13;
 extern uint32_t timestamp;
 extern float Shift;
+extern float pitchZeroAngle;
 
 enum effectState state = NONE;
 
@@ -34,13 +35,13 @@ void setStates() {
 }
 
 void pitchAdjuster(float inc, float angle) {
-	float cmp = Shift+inc;
+	float cmp = angle - pitchZeroAngle;
 	if(cmp < SHIFT_MIN) {
 		Shift = SHIFT_MIN;
 	} else if(cmp > SHIFT_MAX) {
 		Shift = SHIFT_MAX;
 	} else {
-		Shift = Shift+inc;
+		Shift = cmp;
 	}
 }
 
