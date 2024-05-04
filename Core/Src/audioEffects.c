@@ -92,13 +92,13 @@ int Do_PitchShift(int lSample, int rSample) {
 ************************/
 
 //define wet 0.0 <-> 1.0
-float wet = 1.3f;
+float wet = 0.2f;
 //define time delay 0.0 <-> 1.0 (max)
-float time = 1.0f;
+float time = 0.2f;
 
 //define pointer limits = delay time
 int cf0_lim, cf1_lim, cf2_lim, cf3_lim, ap0_lim, ap1_lim, ap2_lim;
-
+	
 //define buffer for comb- and allpassfilters
 float cfbuf0[l_CB0], cfbuf1[l_CB1], cfbuf2[l_CB2], cfbuf3[l_CB3];
 float apbuf0[l_AP0], apbuf1[l_AP1], apbuf2[l_AP2];
@@ -125,6 +125,7 @@ float Do_Comb1(float inSample) {
 	if (cf1_p==cf1_lim) cf1_p = 0;
 	return readback;
 }
+
 float Do_Comb2(float inSample) {
 	float readback = cfbuf2[cf2_p];
 	float n = readback*cf2_g + inSample;
@@ -133,6 +134,7 @@ float Do_Comb2(float inSample) {
 	if (cf2_p==cf2_lim) cf2_p = 0;
 	return readback;
 }
+
 float Do_Comb3(float inSample) {
 	float readback = cfbuf3[cf3_p];
 	float new = readback*cf3_g + inSample;
@@ -161,6 +163,7 @@ float Do_Allpass1(float inSample) {
 	if (ap1_p == ap1_lim) ap1_p=0;
 	return readback;
 }
+
 float Do_Allpass2(float inSample) {
 	float readback = apbuf2[ap2_p];
 	readback += (-ap2_g) * inSample;
@@ -172,9 +175,9 @@ float Do_Allpass2(float inSample) {
 }
 
 float Do_Reverb(float inSample) {
-	float newsample = (Do_Comb0(inSample) + Do_Comb1(inSample) + Do_Comb2(inSample) + Do_Comb3(inSample))/4.0f;
-	newsample = Do_Allpass0(newsample);
-	newsample = Do_Allpass1(newsample);
-	newsample = Do_Allpass2(newsample);
+	float newsample = (Do_Comb0(inSample) + Do_Comb1(inSample) + Do_Comb2(inSample) + Do_Comb3(inSample))*0.25f;
+//	newsample = Do_Allpass0(newsample);
+//	newsample = Do_Allpass1(newsample);
+//	newsample = Do_Allpass2(newsample);
 	return newsample;
 }

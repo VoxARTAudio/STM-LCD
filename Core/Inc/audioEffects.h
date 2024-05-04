@@ -9,12 +9,12 @@
 //Schroeder delays from 25k->96k interpolated
 //*2 delay extension -> not more possible without external ram
 #define l_CB0 3460*1
-#define l_CB1 2988*1
-#define l_CB2 3882*1
-#define l_CB3 4312*1
-#define l_AP0 480*1
-#define l_AP1 161*1
-#define l_AP2 46*1
+#define l_CB1 2988*2
+#define l_CB2 3882*2
+#define l_CB3 4312*2
+#define l_AP0 480*2
+#define l_AP1 161*2
+#define l_AP2 46*2
 
 /************************
 * EXTERN VARIABLES
@@ -33,6 +33,7 @@ float Do_Comb0(float inSample);
 float Do_Comb1(float inSample); 
 float Do_Comb2(float inSample); 
 float Do_Comb3(float inSample);
+float Do_Allpass0(float inSample);
 float Do_Allpass1(float inSample);
 float Do_Allpass2(float inSample);
 float Do_Reverb(float inSample);

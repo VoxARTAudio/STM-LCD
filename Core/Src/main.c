@@ -79,9 +79,16 @@ uint16_t txBuf[8];
 
 int i2cReady = 0;
 
+//IMU State
 extern enum effectState state;
-extern float wet;
+
+//Pitch Shift
 extern float Shift;
+
+//Reverb
+extern float wet;
+extern int cf0_lim, cf1_lim, cf2_lim, cf3_lim , ap0_lim, ap1_lim, ap2_lim;
+extern float time;
 
 /* USER CODE END PV */
 
@@ -106,21 +113,21 @@ void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s) {
 	int lSample = (int) (rxBuf[0]<<16)|rxBuf[1];
 	int rSample = (int) (rxBuf[2]<<16)|rxBuf[3];
 	
-	int ret_sample = Do_PitchShift(lSample, rSample);
-	lSample = ret_sample;
-	rSample = ret_sample;
+//	int ret_sample = Do_PitchShift(lSample, rSample);
+//	lSample = ret_sample;
+//	rSample = ret_sample;
 //	
-//	float sum = (float) (lSample + rSample);
-//	sum = (1.0f-wet)*sum + wet*Do_Reverb(sum);
+	float sum = (float) (lSample + rSample);
+	sum = (1.0f-wet)*sum + wet*Do_Reverb(sum);
 
-//	lSample = (int) sum;
-//	rSample = lSample;
+	lSample = (int) sum;
+	rSample = lSample;
 
 	// divide by 2 (rightshift) -> -3dB per sample
 //	lSample = lSample>>1;
 //	rSample = rSample>>1;
 
-//	//sum to mono
+	//sum to mono
 //	lSample = rSample + lSample;
 //	rSample = lSample;
 
@@ -141,21 +148,22 @@ void HAL_I2SEx_TxRxCpltCallback(I2S_HandleTypeDef *hi2s) {
 	int lSample = (int) (rxBuf[4]<<16)|rxBuf[5];
 	int rSample = (int) (rxBuf[6]<<16)|rxBuf[7];
 	
-	int ret_sample = Do_PitchShift(lSample, rSample);
-	lSample = ret_sample;
-	rSample = ret_sample;
+//	int ret_sample = Do_PitchShift(lSample, rSample);
+//	lSample = ret_sample;
+//	rSample = ret_sample;
 	
-//	float sum = (float) (lSample + rSample);
-//	sum = (1.0f-wet)*sum + wet*Do_Reverb(sum);
+	float sum = (float) (lSample + rSample);
+	
+	sum = (1.0f-wet)*sum + wet*Do_Reverb(sum);
 
-//	lSample = (int) sum;
-//	rSample = lSample;
+	lSample = (int) sum;
+	rSample = lSample;
 
 //	// divide by 2 (rightshift) -> -3dB per sample
 //	lSample = lSample>>1;
 //	rSample = rSample>>1;
 
-//	//sum to mono
+	//sum to mono
 //	lSample = rSample + lSample;
 //	rSample = lSample;
 
@@ -220,7 +228,6 @@ int main(void)
 	
 	BSP_LCD_DisplayStringAtLine(1, ( uint8_t *)"VoxArt"); 
 	BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"  Idle  ");
-	BSP_LCD_DisplayStringAtLine(6, (uint8_t*)"Pitch Shift Value");
 
 	HAL_Delay(1000);
 	
