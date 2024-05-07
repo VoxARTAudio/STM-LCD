@@ -37,7 +37,7 @@ void setStates() {
 }
 
 void pitchAdjuster(float angle) {
-	float cmp = 1.0+(((angle - pitchZeroAngle)/90.0)/3.0);
+	float cmp = 1.0f +(((angle - pitchZeroAngle)/90.0f)/3.0f);
 	if(cmp < SHIFT_MIN) {
 		Shift = SHIFT_MIN;
 	} else if(cmp > SHIFT_MAX) {

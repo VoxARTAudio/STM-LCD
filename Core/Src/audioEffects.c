@@ -39,13 +39,13 @@ int Do_HighPass (int inSample) {
 	return (int) outSampleF;
 }
 
-int Do_PitchShift(int lSample, int rSample) {
-	int sum = lSample + rSample;
+int Do_PitchShift(float sum) {
+//	int sum = lSample + rSample;
 	//sum up and do high-pass
 	//sum=Do_HighPass(sum);
 
 	//write to ringbuffer
-	Buf[WtrP] = sum;
+	Buf[WtrP] = (int)sum;
 
 	//read fractional readpointer and generate 0° and 180° read-pointer in integer
 	int RdPtr_Int = roundf(Rd_P);
@@ -92,7 +92,7 @@ int Do_PitchShift(int lSample, int rSample) {
 ************************/
 
 //define wet 0.0 <-> 1.0
-float wet = 0.2f;
+float wet = 0.3f;
 //define time delay 0.0 <-> 1.0 (max)
 float time = 0.2f;
 
@@ -137,8 +137,8 @@ float Do_Comb2(float inSample) {
 
 float Do_Comb3(float inSample) {
 	float readback = cfbuf3[cf3_p];
-	float new = readback*cf3_g + inSample;
-	cfbuf3[cf3_p] = new;
+	float n = readback*cf3_g + inSample;
+	cfbuf3[cf3_p] = n;
 	cf3_p++;
 	if (cf3_p==cf3_lim) cf3_p = 0;
 	return readback;
@@ -174,10 +174,10 @@ float Do_Allpass2(float inSample) {
 	return readback;
 }
 
-float Do_Reverb(float inSample) {
+int Do_Reverb(float inSample) {
 	float newsample = (Do_Comb0(inSample) + Do_Comb1(inSample) + Do_Comb2(inSample) + Do_Comb3(inSample))*0.25f;
-//	newsample = Do_Allpass0(newsample);
-//	newsample = Do_Allpass1(newsample);
-//	newsample = Do_Allpass2(newsample);
-	return newsample;
+	newsample = Do_Allpass0(newsample);
+	newsample = Do_Allpass1(newsample);
+	newsample = Do_Allpass2(newsample);
+	return (int)newsample;
 }

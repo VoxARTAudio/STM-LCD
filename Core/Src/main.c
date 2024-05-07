@@ -102,40 +102,35 @@ static void MX_I2S2_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_TIM7_Init(void);
 /* USER CODE BEGIN PFP */
+int dsp(int lSample, int rSample);
 void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s);
 void HAL_I2SEx_TxRxCpltCallback(I2S_HandleTypeDef *hi2s);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+int dsp(int lSample, int rSample) {
+	// Mono Sum
+	float sum = (float)(lSample + rSample);
+	
+	int pitchedSumSample = Do_PitchShift(sum);
+	
+	float reverbSumSample = wet*Do_Reverb(sum); //Dry + Wet Mix (Ratio summed)
+	
+	return reverbSumSample + pitchedSumSample;
+}
+
 void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s) {
 	//restore signed 24 bit sample from 16-bit buffers
 	int lSample = (int) (rxBuf[0]<<16)|rxBuf[1];
 	int rSample = (int) (rxBuf[2]<<16)|rxBuf[3];
 	
-//	int ret_sample = Do_PitchShift(lSample, rSample);
-//	lSample = ret_sample;
-//	rSample = ret_sample;
-//	
-	float sum = (float) (lSample + rSample);
-	sum = (1.0f-wet)*sum + wet*Do_Reverb(sum);
-
-	lSample = (int) sum;
+	int effects = dsp(lSample, rSample);
+	
+	//Set L/R Channels to Mono Values
+	lSample = (int) effects;
 	rSample = lSample;
-
-	// divide by 2 (rightshift) -> -3dB per sample
-//	lSample = lSample>>1;
-//	rSample = rSample>>1;
-
-	//sum to mono
-//	lSample = rSample + lSample;
-//	rSample = lSample;
-
-	//AUDIO EFFECTS GO HERE
-//	int pitchSample = pitchShift(lSample, rSample);
-//	lSample = pitchSample;
-//	rSample = pitchSample;
-
+	
 	//restore to buffer
 	txBuf[0] = (lSample>>16)&0xFFFF;
 	txBuf[1] = lSample&0xFFFF;
@@ -148,29 +143,11 @@ void HAL_I2SEx_TxRxCpltCallback(I2S_HandleTypeDef *hi2s) {
 	int lSample = (int) (rxBuf[4]<<16)|rxBuf[5];
 	int rSample = (int) (rxBuf[6]<<16)|rxBuf[7];
 	
-//	int ret_sample = Do_PitchShift(lSample, rSample);
-//	lSample = ret_sample;
-//	rSample = ret_sample;
+	int effects = dsp(lSample, rSample);
 	
-	float sum = (float) (lSample + rSample);
-	
-	sum = (1.0f-wet)*sum + wet*Do_Reverb(sum);
-
-	lSample = (int) sum;
+	//Set L/R Channels to Mono Values
+	lSample = (int) effects;
 	rSample = lSample;
-
-//	// divide by 2 (rightshift) -> -3dB per sample
-//	lSample = lSample>>1;
-//	rSample = rSample>>1;
-
-	//sum to mono
-//	lSample = rSample + lSample;
-//	rSample = lSample;
-
-	//AUDIO EFFECTS GO HERE
-//	int pitchSample = pitchShift(lSample, rSample);
-//	lSample = pitchSample;
-//	rSample = pitchSample;
 
 	//restore to buffer
 	txBuf[4] = (lSample>>16)&0xFFFF;
@@ -189,7 +166,13 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+	cf0_lim = (int)(time*l_CB0);
+	cf1_lim = (int)(time*l_CB1);
+	cf2_lim = (int)(time*l_CB2);
+	cf3_lim = (int)(time*l_CB3);
+	ap0_lim = (int)(time*l_AP0);
+	ap1_lim = (int)(time*l_AP1);
+	ap2_lim = (int)(time*l_AP2);
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -232,7 +215,7 @@ int main(void)
 	HAL_Delay(1000);
 	
 	serialPrintln("[LCD] READY");
-	
+	 
 	//Init IMU
 	if(MPU6050_Init(&hi2c1) == 1) {
 		BSP_LCD_SetTextColor(LCD_COLOR_RED);
@@ -271,9 +254,6 @@ int main(void)
 			setStates();
 			HAL_Delay(100);
 		}
-//		if(dataReady) {
-//			dsp();
-//		}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
