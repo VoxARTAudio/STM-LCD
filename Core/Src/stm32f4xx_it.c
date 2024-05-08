@@ -70,10 +70,11 @@ extern DMA_HandleTypeDef hdma_spi2_tx;
 extern TIM_HandleTypeDef htim7;
 /* USER CODE BEGIN EV */
 extern MPU6050_t MPU6050;
-extern circle c;
-extern imuMovement imu;
+//extern circle c;
+//extern imuMovement imu;
 extern enum effectState state;
 extern float Shift;
+extern float wet;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -279,6 +280,7 @@ void EXTI15_10_IRQHandler(void)
 	//serialPrintln("[Cirlce] Reset position and scale");
 	state = NONE;
 	Shift = 1.0f;
+	wet = 0.0f;
 	BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"  Idle  ");
 	/*BSP_LCD_FillCircle(150, 120, 50);
 	c.xPos = 150;
@@ -328,6 +330,9 @@ void TIM7_IRQHandler(void)
 	switch(state) {
 		case PITCH:
 			pitchAdjuster(MPU6050.KalmanAngleY);
+		break;
+		case REVERB:
+			reverbAdjuster(MPU6050.Az);
 		break;
 	}
   /* USER CODE END TIM7_IRQn 0 */

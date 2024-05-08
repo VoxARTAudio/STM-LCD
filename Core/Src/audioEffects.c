@@ -4,6 +4,7 @@
 */
 
 #include "audioEffects.h"
+# define M_PI           3.14159265358979323846
 
 /************************
 * PITCH SHIFT
@@ -94,7 +95,7 @@ int Do_PitchShift(float sum) {
 //define wet 0.0 <-> 1.0
 float wet = 0.3f;
 //define time delay 0.0 <-> 1.0 (max)
-float time = 0.2f;
+float time = 0.3f;
 
 //define pointer limits = delay time
 int cf0_lim, cf1_lim, cf2_lim, cf3_lim, ap0_lim, ap1_lim, ap2_lim;
@@ -180,4 +181,45 @@ int Do_Reverb(float inSample) {
 	newsample = Do_Allpass1(newsample);
 	newsample = Do_Allpass2(newsample);
 	return (int)newsample;
+}
+
+/************************
+* CHORUS
+************************/
+float Do_Chorus(float inSample) {
+	int sample = Do_Reverb(inSample);
+	sample = Do_Reverb(inSample);
+	sample = Do_Reverb(inSample);
+	
+	return sample;
+}
+
+// -----
+// Define parameters for the chorus effect
+const float chorusModDepth = 0.002f; // Depth of chorus modulation in seconds
+const float chorusModFreq = 0.5f; // Chorus modulation frequency in Hz
+
+const float pitchShiftAmount = 0.5f; // Amount of pitch shift (0.5 means one octave up)
+
+// Define buffer for delay line (used for reverb)
+float delayBuffer[100];
+int delayWriteIndex = 0;
+float delayReadIndex = 0;
+
+// Function to apply chorus effect using reverb and pitch shift
+float ApplyChorusWithReverbAndPitchShift(float inSample) {
+    // Apply reverb effect
+    float reverbSample = Do_Reverb(inSample);
+
+    // Apply pitch shift effect to the reverberated sample
+    float pitchShiftedSample = Do_PitchShift(reverbSample);
+
+    // Update delay buffer with pitch-shifted sample
+    delayBuffer[delayWriteIndex] = pitchShiftedSample;
+
+    // Update indices
+    delayWriteIndex = (delayWriteIndex + 1) % 100;
+    delayReadIndex = (delayReadIndex + 1) % 100;
+
+    return pitchShiftedSample;
 }

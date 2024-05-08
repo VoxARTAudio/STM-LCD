@@ -35,26 +35,26 @@ extern MPU6050_t MPU6050;
 /* ********************* */
 /*    Circle Control     */
 /* ********************* */
-void updateCircle(int x, int y, int r) {
-	c.xPos += x;
-	c.yPos += y;
-	c.radius += r;
-	
-	if((c.radius > MAX_RADIUS) || (c.radius < MIN_RADIUS)) {
-		c.radius = c.radius > MAX_RADIUS ? MAX_RADIUS : MIN_RADIUS;
-	}
+//void updateCircle(int x, int y, int r) {
+//	c.xPos += x;
+//	c.yPos += y;
+//	c.radius += r;
+//	
+//	if((c.radius > MAX_RADIUS) || (c.radius < MIN_RADIUS)) {
+//		c.radius = c.radius > MAX_RADIUS ? MAX_RADIUS : MIN_RADIUS;
+//	}
 
-	if((c.yPos > MAX_Y) || (c.yPos < MIN_Y)) {
-		c.yPos = c.yPos > MAX_Y ? MAX_Y : MIN_Y;
-	}
+//	if((c.yPos > MAX_Y) || (c.yPos < MIN_Y)) {
+//		c.yPos = c.yPos > MAX_Y ? MAX_Y : MIN_Y;
+//	}
 
-	if(c.xPos > MAX_X || c.xPos < MIN_X) {
-		c.xPos = c.xPos > MAX_X ? MAX_X : MIN_X;
-	} 
-	
-	BSP_LCD_Clear(LCD_COLOR_WHITE);
-	BSP_LCD_FillCircle(c.xPos, c.yPos, c.radius);
-}
+//	if(c.xPos > MAX_X || c.xPos < MIN_X) {
+//		c.xPos = c.xPos > MAX_X ? MAX_X : MIN_X;
+//	} 
+//	
+//	BSP_LCD_Clear(LCD_COLOR_WHITE);
+//	BSP_LCD_FillCircle(c.xPos, c.yPos, c.radius);
+//}
 
 /* ********************* */
 /*    Serial Logging     */

@@ -71,8 +71,8 @@ SRAM_HandleTypeDef hsram1;
 
 /* USER CODE BEGIN PV */
 MPU6050_t MPU6050;
-circle c = {50, 150, 120};
-imuMovement imu = {0, 0, 0, NO};
+//circle c = {50, 150, 120};
+//imuMovement imu = {0, 0, 0, NO};
 
 uint16_t rxBuf[8];
 uint16_t txBuf[8];
@@ -115,9 +115,12 @@ int dsp(int lSample, int rSample) {
 	
 	int pitchedSumSample = Do_PitchShift(sum);
 	
-	float reverbSumSample = wet*Do_Reverb(sum); //Dry + Wet Mix (Ratio summed)
+	float reverbSumSample = wet*Do_Reverb(sum); //Wet Mix
 	
-	return reverbSumSample + pitchedSumSample;
+	float chorusSample = ApplyChorusWithReverbAndPitchShift(sum);
+	
+	//return (reverbSumSample + pitchedSumSample)*0.5;
+	return chorusSample;
 }
 
 void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s) {

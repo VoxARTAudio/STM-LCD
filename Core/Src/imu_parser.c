@@ -13,11 +13,11 @@
 /*    Extern Variables   */ 
 /*********************** */
 extern MPU6050_t MPU6050;
-extern imuMovement imu;
-extern TIM_HandleTypeDef htim13;
+//extern imuMovement imu;
 extern uint32_t timestamp;
 extern float Shift;
 extern float pitchZeroAngle;
+extern float wet;
 
 enum effectState state = NONE;
 
@@ -48,4 +48,13 @@ void pitchAdjuster(float angle) {
 }
 
 
+void reverbAdjuster(float accel) {
+	if(accel >= ACCEL_MIN) {
+		wet = accel/3.0f;
+		wet = (wet > 1.0f) ? 1.0f : (wet < 0.0f) ? 0.0f : wet;
+	}
+//	if(accel >= -ACCEL_MIN) {
+//		wet = 0.0f;
+//	}
+}
 
