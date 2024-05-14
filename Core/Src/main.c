@@ -87,7 +87,8 @@ extern float Shift;
 
 //Reverb
 extern float wet;
-extern int cf0_lim, cf1_lim, cf2_lim, cf3_lim , ap0_lim, ap1_lim, ap2_lim;
+extern float chorusWet;
+int cf0_lim, cf1_lim, cf2_lim, cf3_lim , ap0_lim, ap1_lim, ap2_lim;
 extern float time;
 
 /* USER CODE END PV */
@@ -117,10 +118,10 @@ int dsp(int lSample, int rSample) {
 	
 	float reverbSumSample = wet*Do_Reverb(sum); //Wet Mix
 	
-	float chorusSample = ApplyChorusWithReverbAndPitchShift(sum);
+	float chorusSample = Do_Chorus(sum);
 	
 	//return (reverbSumSample + pitchedSumSample)*0.5;
-	return chorusSample;
+	return (chorusWet*chorusSample + (1-chorusWet)*sum)*0.5;
 }
 
 void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s) {

@@ -38,4 +38,3 @@ float Do_Allpass1(float inSample);
 float Do_Allpass2(float inSample);
 int Do_Reverb(float inSample);
 float Do_Chorus(float inSample);
-float ApplyChorusWithReverbAndPitchShift(float inSample);

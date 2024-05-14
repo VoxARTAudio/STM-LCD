@@ -17,6 +17,7 @@ float Shift = 1.0f;
 float CrossFade = 3.0f;
 float a0, a1, a2, b1, b2, hp_in_z1, hp_in_z2, hp_out_z1, hp_out_z2;
 
+
 int Do_HighPass (int inSample) {
 	//300Hz high-pass, 96k
 	a0 = 0.9862117951198142f;
@@ -93,13 +94,13 @@ int Do_PitchShift(float sum) {
 ************************/
 
 //define wet 0.0 <-> 1.0
-float wet = 0.3f;
+float wet = 0.5f;
 //define time delay 0.0 <-> 1.0 (max)
-float time = 0.3f;
+float time = 0.4f;
 
 //define pointer limits = delay time
-int cf0_lim, cf1_lim, cf2_lim, cf3_lim, ap0_lim, ap1_lim, ap2_lim;
-	
+extern int cf0_lim, cf1_lim, cf2_lim, cf3_lim, ap0_lim, ap1_lim, ap2_lim;
+
 //define buffer for comb- and allpassfilters
 float cfbuf0[l_CB0], cfbuf1[l_CB1], cfbuf2[l_CB2], cfbuf3[l_CB3];
 float apbuf0[l_AP0], apbuf1[l_AP1], apbuf2[l_AP2];
@@ -155,71 +156,71 @@ float Do_Allpass0(float inSample) {
 	return readback;
 }
 
-float Do_Allpass1(float inSample) {
-	float readback = apbuf1[ap1_p];
-	readback += (-ap1_g) * inSample;
-	float n = readback*ap1_g + inSample;
-	apbuf1[ap1_p] = n;
-	ap1_p++;
-	if (ap1_p == ap1_lim) ap1_p=0;
-	return readback;
-}
+//float Do_Allpass1(float inSample) {
+//	float readback = apbuf1[ap1_p];
+//	readback += (-ap1_g) * inSample;
+//	float n = readback*ap1_g + inSample;
+//	apbuf1[ap1_p] = n;
+//	ap1_p++;
+//	if (ap1_p == ap1_lim) ap1_p=0;
+//	return readback;
+//}
 
-float Do_Allpass2(float inSample) {
-	float readback = apbuf2[ap2_p];
-	readback += (-ap2_g) * inSample;
-	float n = readback*ap2_g + inSample;
-	apbuf2[ap2_p] = n;
-	ap2_p++;
-	if (ap2_p == ap2_lim) ap2_p=0;
-	return readback;
-}
+//float Do_Allpass2(float inSample) {
+//	float readback = apbuf2[ap2_p];
+//	readback += (-ap2_g) * inSample;
+//	float n = readback*ap2_g + inSample;
+//	apbuf2[ap2_p] = n;
+//	ap2_p++;
+//	if (ap2_p == ap2_lim) ap2_p=0;
+//	return readback;
+//}
 
 int Do_Reverb(float inSample) {
 	float newsample = (Do_Comb0(inSample) + Do_Comb1(inSample) + Do_Comb2(inSample) + Do_Comb3(inSample))*0.25f;
 	newsample = Do_Allpass0(newsample);
-	newsample = Do_Allpass1(newsample);
-	newsample = Do_Allpass2(newsample);
+//	newsample = Do_Allpass1(newsample);
+//	newsample = Do_Allpass2(newsample);
 	return (int)newsample;
 }
 
 /************************
 * CHORUS
 ************************/
+
+//float sampleBuff[3];
+//int chorusPtr = 0;
+
+float oldWet, oldTime, pitchSum;
+float chorusWet = 0.5;
+
 float Do_Chorus(float inSample) {
-	int sample = Do_Reverb(inSample);
-	sample = Do_Reverb(inSample);
-	sample = Do_Reverb(inSample);
-	
-	return sample;
-}
+	oldWet = wet;
+	oldTime = time;
+	wet = 0.8f;
+	time = 0.8f;
+	Shift = 0.8f; // down
+	pitchSum = Do_PitchShift(inSample);
+	Shift = 1.2f; // up
+	pitchSum += Do_PitchShift(inSample);
+	return (Do_Reverb(pitchSum));
+};
 
-// -----
-// Define parameters for the chorus effect
-const float chorusModDepth = 0.002f; // Depth of chorus modulation in seconds
-const float chorusModFreq = 0.5f; // Chorus modulation frequency in Hz
-
-const float pitchShiftAmount = 0.5f; // Amount of pitch shift (0.5 means one octave up)
-
-// Define buffer for delay line (used for reverb)
-float delayBuffer[100];
-int delayWriteIndex = 0;
-float delayReadIndex = 0;
-
-// Function to apply chorus effect using reverb and pitch shift
-float ApplyChorusWithReverbAndPitchShift(float inSample) {
-    // Apply reverb effect
-    float reverbSample = Do_Reverb(inSample);
-
-    // Apply pitch shift effect to the reverberated sample
-    float pitchShiftedSample = Do_PitchShift(reverbSample);
-
-    // Update delay buffer with pitch-shifted sample
-    delayBuffer[delayWriteIndex] = pitchShiftedSample;
-
-    // Update indices
-    delayWriteIndex = (delayWriteIndex + 1) % 100;
-    delayReadIndex = (delayReadIndex + 1) % 100;
-
-    return pitchShiftedSample;
-}
+//float Do_Chorus(float inSample) {
+//	sampleBuff[chorusPtr] = inSample;
+//	chorusPtr++;
+//	float addRev = inSample;
+//	
+//	if(chorusPtr == 3) {
+//		float pitchShiftSample = 0;
+//		
+//		for(int i=0; i<3; i++) {
+//			pitchShiftSample += Do_PitchShift(sampleBuff[i]);
+//		}
+//		
+//		addRev = Do_Reverb(pitchShiftSample)*0.25f;
+//		chorusPtr = 0;
+//	}
+//	
+//	return addRev;
+//}
